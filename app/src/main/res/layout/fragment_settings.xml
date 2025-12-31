@@ -146,6 +146,8 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+
+
         <!-- Botón Aceptar -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnAccept"
@@ -159,6 +161,74 @@
             app:icon="@android:drawable/ic_menu_save"
             app:iconGravity="textStart" />
 
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardFirebaseTesting"
+            style="@style/Card.Elevated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:visibility="visible">  <!-- Cambiar a "gone" en producción -->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🔧 Pruebas de Firebase (DEBUG)"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Estos botones son solo para verificar que Firebase funciona correctamente."
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginBottom="16dp" />
+
+                <!-- Botón para probar Analytics -->
+                <Button
+                    android:id="@+id/btnTestAnalytics"
+                    style="@style/Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="✅ Probar Analytics"
+                    android:textSize="16sp"
+
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Botón para probar Crashlytics -->
+                <Button
+                    android:id="@+id/btnTestCrashlytics"
+                    style="@style/Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="⚠️ Probar Crashlytics (No Fatal)"
+                    android:textSize="16sp"
+
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Botón para forzar crash (PELIGROSO) -->
+                <Button
+                    android:id="@+id/btnForceCrash"
+                    style="@style/Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="💥 Forzar Crash (CERRAR APP)"
+                    android:textSize="16sp"
+
+                    android:textColor="@color/error" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
 
 </ScrollView>

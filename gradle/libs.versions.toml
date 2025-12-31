@@ -13,6 +13,12 @@ constraintlayout = "2.1.4"
 adapters = "3.2.0-alpha11"
 carUiLib = "2.6.0"
 
+
+firebaseBom = "32.7.0"
+googleServices = "4.4.0"
+firebaseCrashlytics = "2.9.9"
+
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -26,7 +32,19 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-adapters = { group = "androidx.databinding", name = "adapters", version.ref = "adapters" }
 car-ui-lib = { group = "com.android.car.ui", name = "car-ui-lib", version.ref = "carUiLib" }
 
+# ✅ AGREGAR: Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
+firebase-perf = { group = "com.google.firebase", name = "firebase-perf-ktx" }
+
+
+
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
+
 

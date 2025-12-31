@@ -26,6 +26,8 @@ import com.cielo.applibros.presentation.fragments.*
 import com.cielo.applibros.presentation.viewmodel.BookViewModelUpdated
 import com.cielo.applibros.presentation.viewmodel.ProfileViewModel
 import com.cielo.applibros.presentation.viewmodel.SettingsViewModel
+import com.cielo.applibros.utils.AnalyticsHelper
+import com.cielo.applibros.utils.CrashlyticsHelper
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -45,15 +47,23 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var settingsPreferences: SettingsPreferences // NUEVO
 
+    // ✅ AGREGAR: Firebase Helpers
+    private lateinit var analyticsHelper: AnalyticsHelper
+    private lateinit var crashlyticsHelper: CrashlyticsHelper
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        initializeFirebase()
 
         // AGREGAR: Cargar tema antes de setContentView
         settingsPreferences = SettingsPreferences(this)
         applyTheme(settingsPreferences.getSettings().themeMode)
 
         setContentView(R.layout.activity_main)
+
+        analyticsHelper.logScreenView("MainActivity")
 
         setupDependencies()
         setupViews()
@@ -68,7 +78,18 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    private fun initializeFirebase() {
+        val app = application as BookTrackerApplication
+        analyticsHelper = AnalyticsHelper(app.analytics)
+        crashlyticsHelper = CrashlyticsHelper(app.crashlytics)
+
+        // Log inicio de sesión
+        crashlyticsHelper.logUserAction("App Started")
+    }
+
     private fun setupDependencies() {
+
+        try {
         // Configurar OkHttpClient
         val okHttpClient = NetworkHelper.createUnsafeOkHttpClient()
 
@@ -146,14 +167,21 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             getCurrentlyReadingUseCase,
             getFinishedBooksUseCase,
             updateStartDateUseCase,
-            updateFinishDateUseCase
+            updateFinishDateUseCase,
+            analyticsHelper,  // ✅ AGREGAR
+            crashlyticsHelper  // ✅ AGREGAR
+
         )
 
         profileViewModel = ProfileViewModel(getUserStatsUseCase)
 
         settingsViewModel = SettingsViewModel(settingsPreferences)
-
+        } catch (e: Exception) {
+            // ✅ AGREGAR: Log de error en Crashlytics
+            crashlyticsHelper.logException(e, "setupDependencies")
+        }
     }
+
     private fun applyTheme(theme: ThemeMode) {
         val mode = when (theme) {
             ThemeMode.LIGHT -> AppCompatDelegate.MODE_NIGHT_NO
@@ -215,9 +243,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun loadFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .commit()
+        try {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .commit()
+
+            // ✅ AGREGAR: Log de navegación
+            val fragmentName = fragment::class.simpleName ?: "Unknown"
+            analyticsHelper.logFragmentOpened(fragmentName)
+            crashlyticsHelper.logNavigationEvent(fragmentName)
+
+        } catch (e: Exception) {
+            crashlyticsHelper.logException(e, "loadFragment")
+        }
     }
 
     // Implementación del NavigationView.OnNavigationItemSelectedListener
@@ -225,26 +263,36 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         when (item.itemId) {
             R.id.nav_profile -> {
                 loadFragment(ProfileFragment())
+                analyticsHelper.logFeatureUsed("profile")
             }
             R.id.nav_statistics -> {
                 loadFragment(StatisticsFragment())
+                analyticsHelper.logFeatureUsed("statistics")
             }
             R.id.nav_favorites -> {
                 loadFragment(FavoritesFragment())
+                analyticsHelper.logFeatureUsed("favorites")
             }
             R.id.nav_reading_log -> {
-                loadFragment(ReadingLogFragment()) // NUEVO
+                loadFragment(ReadingLogFragment())
+                analyticsHelper.logFeatureUsed("reading_log")
             }
             R.id.nav_settings -> {
                 loadFragment(SettingsFragment())
+                analyticsHelper.logFeatureUsed("settings")
             }
             R.id.nav_about -> {
                 showAboutDialog()
+                analyticsHelper.logFeatureUsed("about")
             }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
     }
+
+    // Métodos públicos para compartir helpers
+    fun getAnalyticsHelper(): AnalyticsHelper = analyticsHelper
+    fun getCrashlyticsHelper(): CrashlyticsHelper = crashlyticsHelper
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {

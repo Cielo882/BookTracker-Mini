@@ -19,6 +19,8 @@ import com.cielo.applibros.domain.usecase.UpdateBookReviewUseCase
 import com.cielo.applibros.domain.usecase.UpdateBookStatusUseCase
 import com.cielo.applibros.domain.usecase.UpdateFinishDateUseCase
 import com.cielo.applibros.domain.usecase.UpdateStartDateUseCase
+import com.cielo.applibros.utils.AnalyticsHelper
+import com.cielo.applibros.utils.CrashlyticsHelper
 import kotlinx.coroutines.launch
 
 class BookViewModelUpdated(
@@ -35,7 +37,9 @@ class BookViewModelUpdated(
     private val getCurrentlyReadingUseCase: GetCurrentlyReadingUseCase,
     private val getFinishedBooksUseCase: GetFinishedBooksUseCase,
     private val updateStartDateUseCase: UpdateStartDateUseCase,
-    private val updateFinishDateUseCase: UpdateFinishDateUseCase
+    private val updateFinishDateUseCase: UpdateFinishDateUseCase,
+    private val analyticsHelper: AnalyticsHelper,  // ✅ AGREGAR
+    private val crashlyticsHelper: CrashlyticsHelper  // ✅ AGREGAR
 ) : ViewModel() {
 
     // LiveData para resultados de búsqueda
@@ -64,8 +68,12 @@ class BookViewModelUpdated(
                 _error.value = null
                 val result = getBooksUseCase(query)
                 _books.value = result
+                analyticsHelper.logBookSearch(query, result.size)
+
             } catch (e: Exception) {
                 _error.value = e.message
+                crashlyticsHelper.logNetworkError("search", e.message ?: "Unknown error")
+
             } finally {
                 _isLoading.value = false
             }
@@ -88,8 +96,16 @@ class BookViewModelUpdated(
             try {
                 addToReadUseCase(book)
                 // Las LiveData se actualizarán automáticamente
+
+                // ✅ AGREGAR: Log evento en Analytics
+                analyticsHelper.logBookAdded(book, ReadingStatus.TO_READ)
+
+                // ✅ AGREGAR: Log acción en Crashlytics
+                crashlyticsHelper.logUserAction("Book Added", book.title)
             } catch (e: Exception) {
                 _error.value = e.message
+                // ✅ AGREGAR: Log error
+                crashlyticsHelper.logException(e, "addToRead")
             }
         }
     }
@@ -111,8 +127,12 @@ class BookViewModelUpdated(
             try {
                 updateBookRatingUseCase(bookId, rating)
                 loadBooksByStatus(ReadingStatus.FINISHED)
+                analyticsHelper.logFeatureUsed("book_rated_$rating")
+
             } catch (e: Exception) {
                 _error.value = e.message
+                crashlyticsHelper.logException(e, "updateBookRating")
+
             }
         }
     }
@@ -123,8 +143,17 @@ class BookViewModelUpdated(
             try {
                 updateBookStatusUseCase(bookId, status)
                 // Las LiveData se actualizarán automáticamente
+                // ✅ AGREGAR: Log cambio de estado
+                analyticsHelper.logFeatureUsed("status_changed_to_${status.name}")
+                // Registrar si se terminó un libro
+                if (status == ReadingStatus.FINISHED) {
+                    // Aquí podrías calcular días de lectura si tienes las fechas
+                    analyticsHelper.logFeatureUsed("book_finished")
+                }
             } catch (e: Exception) {
                 _error.value = e.message
+                crashlyticsHelper.logException(e, "updateBookStatus")
+
             }
         }
     }

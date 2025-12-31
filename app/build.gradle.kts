@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
+
 
     /*
     id("com.android.application")
@@ -33,6 +36,18 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // ✅ AGREGAR: Habilitar Crashlytics mapping para release
+            configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
+                mappingFileUploadEnabled = true
+            }
+        }
+
+        debug {
+
+            // ✅ AGREGAR: Deshabilitar en debug
+            configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
+                mappingFileUploadEnabled = false
+            }
         }
     }
     compileOptions {
@@ -99,4 +114,13 @@ dependencies {
 
     // MPAndroidChart para gráficos
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // Lottie para animaciones
+    implementation("com.airbnb.android:lottie:6.1.0")
+
+    // ✅ AGREGAR: Firebase (usando BoM)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.perf)
 }

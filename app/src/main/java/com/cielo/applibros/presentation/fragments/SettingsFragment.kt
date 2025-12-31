@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.cielo.applibros.MainActivity
@@ -16,6 +19,7 @@ import com.cielo.applibros.domain.model.Language
 import com.cielo.applibros.domain.model.ThemeMode
 import com.cielo.applibros.presentation.viewmodel.SettingsViewModel
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.BuildConfig
 
 class SettingsFragment : Fragment() {
 
@@ -52,6 +56,8 @@ class SettingsFragment : Fragment() {
         setupViews(view)
         observeSettings()
         setupListeners()
+        setupFirebaseTestButtons(view)
+
     }
 
     private fun setupViews(view: View) {
@@ -114,6 +120,7 @@ class SettingsFragment : Fragment() {
             }
             updateAcceptButtonState()
         }
+
 
         // Botón Aceptar - aplica los cambios
         btnAccept.setOnClickListener {
@@ -216,4 +223,68 @@ class SettingsFragment : Fragment() {
             }
             .show()
     }
+
+    private fun setupFirebaseTestButtons(view: View) {
+
+        val mainActivity = activity as? MainActivity ?: return
+        val analyticsHelper = mainActivity.getAnalyticsHelper()
+        val crashlyticsHelper = mainActivity.getCrashlyticsHelper()
+
+        // -----------------------------------------
+        // BOTÓN 1: PROBAR ANALYTICS (NO CRASH)
+        // -----------------------------------------
+        view.findViewById<Button>(R.id.btnTestAnalytics)?.setOnClickListener {
+
+            analyticsHelper.logFeatureUsed("firebase_test_analytics")
+            analyticsHelper.logScreenView("TestScreen")
+
+            crashlyticsHelper.logUserAction("Analytics Test Button Clicked")
+
+            Toast.makeText(
+                requireContext(),
+                "✅ Evento de Analytics enviado (revisa Firebase en unos minutos)",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        // -----------------------------------------
+        // BOTÓN 2: PROBAR ERROR NO FATAL
+        // -----------------------------------------
+        view.findViewById<Button>(R.id.btnTestCrashlytics)?.setOnClickListener {
+
+            crashlyticsHelper.testNonFatalError()
+
+            Toast.makeText(
+                requireContext(),
+                "⚠️ Error NO fatal enviado a Crashlytics",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        // -----------------------------------------
+        // BOTÓN 3: FORZAR CRASH REAL (FATAL)
+        // -----------------------------------------
+        view.findViewById<Button>(R.id.btnForceCrash)?.setOnClickListener {
+
+            AlertDialog.Builder(requireContext())
+                .setTitle("⚠️ Advertencia")
+                .setMessage(
+                    "Esto forzará un crash REAL y cerrará la app.\n\n" +
+                            "Úsalo solo para verificar Crashlytics.\n\n" +
+                            "¿Continuar?"
+                )
+                .setPositiveButton("Sí, forzar crash") { _, _ ->
+
+                    // 🔥 CRASH REAL — NO try/catch
+                    crashlyticsHelper.forceCrashForTesting()
+
+                    // Alternativa oficial (también válida):
+                    // FirebaseCrashlytics.getInstance().crash()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+    }
+
+
 }
