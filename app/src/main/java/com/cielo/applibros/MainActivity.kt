@@ -260,6 +260,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // Implementación del NavigationView.OnNavigationItemSelectedListener
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        clearBottomNavigationSelection()
         when (item.itemId) {
             R.id.nav_profile -> {
                 loadFragment(ProfileFragment())
@@ -336,5 +337,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             )
             .setPositiveButton("Cerrar", null)
             .show()
+    }
+
+    private fun clearBottomNavigationSelection() {
+        bottomNavigation.menu.setGroupCheckable(0, true, false)
+        for (i in 0 until bottomNavigation.menu.size()) {
+            bottomNavigation.menu.getItem(i).isChecked = false
+        }
+        bottomNavigation.menu.setGroupCheckable(0, true, true)
     }
 }

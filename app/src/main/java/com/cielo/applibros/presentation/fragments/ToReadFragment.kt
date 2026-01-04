@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import com.cielo.applibros.MainActivity
 import com.cielo.applibros.R
 import com.cielo.applibros.domain.model.ReadingStatus
@@ -20,6 +22,10 @@ class ToReadFragment : Fragment() {
     private lateinit var bookAdapter: BookAdapter
     private lateinit var recyclerView: RecyclerView
     private lateinit var swipeRefresh: SwipeRefreshLayout
+
+    private lateinit var emptyState: View
+    private lateinit var emptyAnimation: LottieAnimationView
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +40,28 @@ class ToReadFragment : Fragment() {
 
         viewModel = (activity as MainActivity).getBookViewModel()
 
+        emptyState = view.findViewById(R.id.emptyState)
+        emptyAnimation = view.findViewById(R.id.lottieEmpty)
+
+        setupLottie()
+
         setupSwipeRefresh(view)
         setupRecyclerView(view)
+
         setupObservers()
+    }
+
+    private fun setupLottie() {
+        try {
+            emptyAnimation.setAnimation(R.raw.books)
+            emptyAnimation.repeatCount = LottieDrawable.INFINITE
+        } catch (e: Exception) {
+            emptyState.visibility = View.GONE
+        }
+
+        emptyAnimation.setFailureListener {
+            emptyState.visibility = View.GONE
+        }
     }
 
     private fun setupSwipeRefresh(view: View) {
@@ -82,9 +107,37 @@ class ToReadFragment : Fragment() {
 
     private fun setupObservers() {
         viewModel.booksToRead.observe(viewLifecycleOwner) { books ->
-            // Detener el refresh cuando llegan los datos
             swipeRefresh.isRefreshing = false
             bookAdapter.submitList(books)
+
+            val isEmpty = books.isEmpty()
+
+            recyclerView.visibility = if (isEmpty) View.GONE else View.VISIBLE
+            emptyState.visibility = if (isEmpty) View.VISIBLE else View.GONE
+
+            if (isEmpty) {
+                emptyAnimation.playAnimation()
+            } else {
+                emptyAnimation.cancelAnimation()
+            }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        emptyAnimation.pauseAnimation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (emptyState.visibility == View.VISIBLE) {
+            emptyAnimation.playAnimation()
+        }
+    }
+
+    override fun onDestroyView() {
+        emptyAnimation.cancelAnimation()
+        super.onDestroyView()
+    }
+
 }
