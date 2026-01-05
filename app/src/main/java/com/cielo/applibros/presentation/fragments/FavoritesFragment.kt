@@ -60,7 +60,7 @@ class FavoritesFragment : Fragment() {
 
     private fun setupLottie() {
         try {
-            emptyAnimation.setAnimation(R.raw.books)
+            emptyAnimation.setAnimation(R.raw.tiktok_heart)
             emptyAnimation.repeatCount = LottieDrawable.INFINITE
         } catch (e: Exception) {
             emptyState.visibility = View.GONE
