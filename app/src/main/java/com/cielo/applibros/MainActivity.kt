@@ -51,6 +51,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var analyticsHelper: AnalyticsHelper
     private lateinit var crashlyticsHelper: CrashlyticsHelper
 
+    private lateinit var repository: BookRepositoryImpl
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,6 +90,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setupDependencies() {
+
+
 
         try {
         // Configurar OkHttpClient
@@ -133,8 +137,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val settingsPreferences = SettingsPreferences(applicationContext)
 
         // Crear repository con el servicio unificado
-        val repository = BookRepositoryImpl(unifiedSearchService, bookDao, settingsPreferences)
-
+        // ✅ INICIALIZAR EL REPOSITORY DE LA CLASE
+            repository = BookRepositoryImpl(
+                unifiedSearchService,
+                bookDao,
+                settingsPreferences
+            )
         // Use cases existentes
         val getBooksUseCase = GetBooksUseCase(repository)
         val getReadBooksUseCase = GetReadBooksUseCase(repository)
@@ -153,6 +161,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val updateStartDateUseCase = UpdateStartDateUseCase(repository)
         val updateFinishDateUseCase = UpdateFinishDateUseCase(repository)
 
+            // NUEVOS Use Cases para Export/Import
+            val getAllBooksUseCase = GetAllBooksUseCase(repository)
+            val importBooksUseCase = ImportBooksUseCase(repository)
+            val clearAllBooksUseCase = ClearAllBooksUseCase(repository)
+
         // ViewModels
         bookViewModel = BookViewModelUpdated(
             getBooksUseCase,
@@ -168,8 +181,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             getFinishedBooksUseCase,
             updateStartDateUseCase,
             updateFinishDateUseCase,
-            analyticsHelper,  // ✅ AGREGAR
-            crashlyticsHelper  // ✅ AGREGAR
+            getAllBooksUseCase,      // ✅ NUEVO
+            importBooksUseCase,      // ✅ NUEVO
+            clearAllBooksUseCase,
+                    analyticsHelper,  // ✅ AGREGAR
+            crashlyticsHelper , // ✅ AGREGAR
 
         )
 
@@ -332,8 +348,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .setTitle("Acerca de BookTracker")
             .setMessage(
                 "BookTracker v2.0\n\n" +
-                        "Tu biblioteca personal para organizar y rastrear tus lecturas.\n\n" +
-                        "Desarrollado con ❤️ usando Clean Architecture y Kotlin"
+                        "Tu BookTracker personal para organizar y rastrear tus lecturas.\n\n" +
+                        "Desarrollado con ❤️ por Simple Apps.\n\n" +
+                        "© 2024 Simple Apps. Todos los derechos reservados."
             )
             .setPositiveButton("Cerrar", null)
             .show()

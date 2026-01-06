@@ -162,13 +162,65 @@
             app:iconGravity="textStart" />
 
 
+
+
+        <!-- Sección de Datos -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="💾 Respaldo de Datos"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp" />
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Card.Elevated"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <Button
+                    android:id="@+id/btnExportData"
+                    style="@style/Button.Primary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📤 Exportar mi biblioteca"
+                    android:layout_marginBottom="8dp" />
+
+                <Button
+                    android:id="@+id/btnImportData"
+                    style="@style/Button.Secondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="📥 Importar desde respaldo" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Guarda una copia de seguridad de tu biblioteca en formato JSON"
+                    android:textSize="12sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardFirebaseTesting"
             style="@style/Card.Elevated"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:visibility="visible">  <!-- Cambiar a "gone" en producción -->
+            android:visibility="gone">  <!-- Cambiar a "gone" en producción -->
 
             <LinearLayout
                 android:layout_width="match_parent"

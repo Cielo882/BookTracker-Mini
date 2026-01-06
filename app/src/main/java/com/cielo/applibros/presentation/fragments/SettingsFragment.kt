@@ -1,6 +1,7 @@
 package com.cielo.applibros.presentation.fragments
 
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,21 +10,36 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.cielo.applibros.MainActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.cielo.applibros.R
+import com.cielo.applibros.data.local.ExportImportHelper
+import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.Language
 import com.cielo.applibros.domain.model.ThemeMode
+import com.cielo.applibros.presentation.viewmodel.BookViewModelUpdated
 import com.cielo.applibros.presentation.viewmodel.SettingsViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.BuildConfig
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
+import com.google.gson.Gson
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class SettingsFragment : Fragment() {
 
     private lateinit var viewModel: SettingsViewModel
+
+    private lateinit var exportImportHelper: ExportImportHelper
+    private lateinit var bookViewModel: BookViewModelUpdated
+
 
     private lateinit var rgLanguage: RadioGroup
     private lateinit var rbSpanish: RadioButton
@@ -40,6 +56,20 @@ class SettingsFragment : Fragment() {
     private var tempLanguage: Language? = null
     private var tempTheme: ThemeMode? = null
 
+    private val exportLauncher = registerForActivityResult(
+        ActivityResultContracts.CreateDocument("application/json")
+    ) { uri ->
+        uri?.let { exportToUri(it) }
+    }
+
+    private val importLauncher = registerForActivityResult(
+        ActivityResultContracts.OpenDocument()
+    ) { uri ->
+        uri?.let { importFromUri(it) }
+    }
+
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -52,12 +82,122 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = (activity as MainActivity).getSettingsViewModel()
+        bookViewModel = (activity as MainActivity).getBookViewModel()
+        exportImportHelper = ExportImportHelper(requireContext())
+
 
         setupViews(view)
         observeSettings()
         setupListeners()
         setupFirebaseTestButtons(view)
+        setupButtons(view)
 
+    }
+
+    private fun setupButtons(view: View) {
+        view.findViewById<Button>(R.id.btnExportData).setOnClickListener {
+            exportData()
+        }
+
+        view.findViewById<Button>(R.id.btnImportData).setOnClickListener {
+            importData()
+        }
+    }
+
+    private fun exportData() {
+        val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+        val fileName = "BookTracker_backup_$timestamp.json"
+        exportLauncher.launch(fileName)
+    }
+
+    private fun exportToUri(uri: Uri) {
+        lifecycleScope.launch {
+            try {
+                // Obtener todos los libros
+                val allBooks = bookViewModel.getAllBooksForExport() // Necesitas crear este método
+
+                val json = Gson().toJson(allBooks)
+
+                requireContext().contentResolver.openOutputStream(uri)?.use { output ->
+                    output.write(json.toByteArray())
+                }
+
+                Toast.makeText(
+                    requireContext(),
+                    "✅ Backup exportado exitosamente",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "❌ Error al exportar: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun importData() {
+        importLauncher.launch(arrayOf("application/json"))
+    }
+
+    private fun importFromUri(uri: Uri) {
+        lifecycleScope.launch {
+            try {
+                val json = requireContext().contentResolver.openInputStream(uri)
+                    ?.bufferedReader()?.use { it.readText() }
+
+                val type = object : TypeToken<List<Book>>() {}.type
+                val books: List<Book> = Gson().fromJson(json, type)
+
+                // Mostrar diálogo de confirmación
+                showImportConfirmation(books)
+
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "❌ Error al importar: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+
+    private fun showImportConfirmation(books: List<Book>) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Importar Biblioteca")
+            .setMessage(
+                "Se importarán ${books.size} libros.\n\n" +
+                        "⚠️ Esto reemplazará tu biblioteca actual.\n\n" +
+                        "¿Deseas continuar?"
+            )
+            .setPositiveButton("Importar") { _, _ ->
+                importBooks(books)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun importBooks(books: List<Book>) {
+        lifecycleScope.launch {
+            try {
+                bookViewModel.importBooks(books) // Necesitas crear este método
+
+                Toast.makeText(
+                    requireContext(),
+                    "✅ ${books.size} libros importados",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "❌ Error: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun setupViews(view: View) {

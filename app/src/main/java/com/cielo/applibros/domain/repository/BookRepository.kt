@@ -37,4 +37,8 @@ interface BookRepository {
     suspend fun getAverageRating(): Double?
     suspend fun getCurrentlyReading(): List<Book>
     suspend fun getFavoriteBooks(): List<Book>
+
+    suspend fun getBooksToReadList(): List<Book>
+    suspend fun getCurrentlyReadingList(): List<Book>
+    suspend fun clearAllBooks()
 }

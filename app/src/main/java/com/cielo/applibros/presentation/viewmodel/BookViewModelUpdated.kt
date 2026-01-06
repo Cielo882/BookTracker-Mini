@@ -7,11 +7,14 @@ import androidx.lifecycle.viewModelScope
 import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.ReadingStatus
 import com.cielo.applibros.domain.usecase.AddToReadUseCase
+import com.cielo.applibros.domain.usecase.ClearAllBooksUseCase
+import com.cielo.applibros.domain.usecase.GetAllBooksUseCase
 import com.cielo.applibros.domain.usecase.GetBooksToReadUseCase
 import com.cielo.applibros.domain.usecase.GetBooksUseCase
 import com.cielo.applibros.domain.usecase.GetCurrentlyReadingUseCase
 import com.cielo.applibros.domain.usecase.GetFinishedBooksUseCase
 import com.cielo.applibros.domain.usecase.GetReadBooksUseCase
+import com.cielo.applibros.domain.usecase.ImportBooksUseCase
 import com.cielo.applibros.domain.usecase.RemoveFromReadUseCase
 import com.cielo.applibros.domain.usecase.ToggleFavoriteUseCase
 import com.cielo.applibros.domain.usecase.UpdateBookRatingUseCase
@@ -21,7 +24,9 @@ import com.cielo.applibros.domain.usecase.UpdateFinishDateUseCase
 import com.cielo.applibros.domain.usecase.UpdateStartDateUseCase
 import com.cielo.applibros.utils.AnalyticsHelper
 import com.cielo.applibros.utils.CrashlyticsHelper
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class BookViewModelUpdated(
     private val getBooksUseCase: GetBooksUseCase,
@@ -38,6 +43,9 @@ class BookViewModelUpdated(
     private val getFinishedBooksUseCase: GetFinishedBooksUseCase,
     private val updateStartDateUseCase: UpdateStartDateUseCase,
     private val updateFinishDateUseCase: UpdateFinishDateUseCase,
+    private val getAllBooksUseCase: GetAllBooksUseCase,
+    private val importBooksUseCase: ImportBooksUseCase,
+    private val clearAllBooksUseCase: ClearAllBooksUseCase,
     private val analyticsHelper: AnalyticsHelper,  // ✅ AGREGAR
     private val crashlyticsHelper: CrashlyticsHelper  // ✅ AGREGAR
 ) : ViewModel() {
@@ -203,4 +211,32 @@ class BookViewModelUpdated(
         // No es necesario hacer nada aquí, las LiveData se mantienen actualizadas automáticamente
         // Pero puedes usar este método para forzar una actualización si es necesario
     }
+    suspend fun getAllBooksForExport(): List<Book> {
+        return withContext(Dispatchers.IO) {
+            try {
+                getAllBooksUseCase.execute()
+            } catch (e: Exception) {
+                _error.value = "Error al obtener libros: ${e.message}"
+                emptyList()
+            }
+        }
+    }
+
+    fun importBooks(books: List<Book>) {
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                _error.value = null
+
+                importBooksUseCase.execute(books, clearExisting = true)
+
+                _isLoading.value = false
+            } catch (e: Exception) {
+                _error.value = "Error al importar: ${e.message}"
+                _isLoading.value = false
+            }
+        }
+    }
+
+
 }

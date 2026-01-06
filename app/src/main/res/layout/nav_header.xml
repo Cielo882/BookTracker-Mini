@@ -7,7 +7,9 @@
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="24dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:clickable="true"
+    android:focusable="true"
+    android:theme="@style/ThemeOverlay.AppCompat">
 
     <ImageView
         android:id="@+id/ivProfileImage"

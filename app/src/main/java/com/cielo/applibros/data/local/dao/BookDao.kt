@@ -81,4 +81,14 @@ interface BookDao {
     // ✅ AGREGAR ESTE MÉTODO NUEVO (versión suspendida)
     @Query("SELECT * FROM books WHERE readingStatus = 'FINISHED' ORDER BY finishDate DESC")
     suspend fun getFinishedBooksList(): List<BookEntity>
+
+    // Métodos para obtener listas directas (no LiveData)
+    @Query("SELECT * FROM books WHERE readingStatus = 'TO_READ' ORDER BY dateAdded DESC")
+    suspend fun getBooksToReadList(): List<BookEntity>
+
+
+
+    // Limpiar toda la base de datos
+    @Query("DELETE FROM books")
+    suspend fun deleteAllBooks()
 }
