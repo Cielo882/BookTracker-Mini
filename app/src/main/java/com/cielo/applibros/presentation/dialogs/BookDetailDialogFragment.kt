@@ -1,5 +1,6 @@
 package com.cielo.applibros.presentation.dialogs
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.cielo.applibros.MainActivity
 import com.google.android.material.textfield.TextInputEditText
@@ -15,10 +17,12 @@ import com.cielo.applibros.R
 import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.ReadingStatus
 import com.cielo.applibros.presentation.viewmodel.BookViewModelUpdated
+import com.cielo.applibros.utils.ShareBookHelper
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -60,6 +64,11 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
 
     private lateinit var btnSave: Button
     private lateinit var btnClose: Button
+
+    //  favorito
+    private lateinit var favoriteContainer: LinearLayout
+    private lateinit var ivFavoriteIcon: ImageView
+    private var isFavorite: Boolean = false
 
     companion object {
         private const val ARG_BOOK_ID = "book_id"
@@ -124,8 +133,10 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
         tilReview = view.findViewById(R.id.tilReview)
         etReview = view.findViewById(R.id.etReview)
 
-        cbFavorite = view.findViewById(R.id.cbFavorite)
+        //cbFavorite = view.findViewById(R.id.cbFavorite)
 
+        favoriteContainer = view.findViewById(R.id.favoriteContainer)
+        ivFavoriteIcon = view.findViewById(R.id.ivFavoriteIcon)
         // Contenedores de fechas
         startDateContainer = view.findViewById(R.id.startDateContainer)
         finishDateContainer = view.findViewById(R.id.finishDateContainer)
@@ -140,8 +151,66 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
 
         btnSave = view.findViewById(R.id.btnSave)
         btnClose = view.findViewById(R.id.btnClose)
+
+        // ✅ NUEVO: Botón compartir (solo visible si está terminado)
+        view.findViewById<Button>(R.id.btnShareBook)?.apply {
+            if (book?.readingStatus == ReadingStatus.FINISHED) {
+                visibility = View.VISIBLE
+                setOnClickListener {
+                    if (hasUnsavedChanges()) {
+                        showSaveFirstDialog()
+                    } else {
+                        shareBook(book!!)
+                    }
+                }
+            }
+        }
     }
 
+    private fun hasUnsavedChanges(): Boolean {
+        val book = this.book ?: return false
+
+        // Verificar si el estado cambió
+        val currentStatus = when (spinnerStatus.selectedItemPosition) {
+            0 -> ReadingStatus.TO_READ
+            1 -> ReadingStatus.READING
+            2 -> ReadingStatus.FINISHED
+            else -> ReadingStatus.TO_READ
+        }
+
+        if (currentStatus != book.readingStatus) return true
+
+        // Verificar si cambió el rating
+        if (ratingBar.rating.toInt() != (book.rating ?: 0)) return true
+
+        // Verificar si cambió la reseña
+        val currentReview = etReview.text?.toString()?.trim() ?: ""
+        val originalReview = book.review ?: ""
+        if (currentReview != originalReview) return true
+
+        // Verificar si cambió favorito
+        //if (cbFavorite.isChecked != book.isFavorite) return true
+        if (isFavorite != book.isFavorite) return true
+
+        return false
+    }
+
+    private fun showSaveFirstDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("⚠️ Cambios sin guardar")
+            .setMessage("Debes guardar los cambios antes de compartir.\n\n¿Deseas guardar ahora?")
+            .setPositiveButton("Guardar y compartir") { _, _ ->
+                book?.let {
+                    saveBookChanges(it)
+                    // Esperar un momento para que se guarde
+                    view?.postDelayed({
+                        shareBook(it)
+                    }, 500)
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
     private fun setupStatusSpinner() {
         val statusOptions = arrayOf("Por leer", "Leyendo", "Terminado")
         val adapter = ArrayAdapter(
@@ -178,6 +247,32 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
         btnEditFinishDate.setOnClickListener {
             showFinishDatePicker()
         }
+
+        favoriteContainer.setOnClickListener {
+            isFavorite = !isFavorite
+            updateFavoriteIcon()
+        }
+    }
+
+    private fun updateFavoriteIcon() {
+        if (isFavorite) {
+            ivFavoriteIcon.setImageResource(R.drawable.ic_favorite_filled)
+            // Animación opcional
+            ivFavoriteIcon.animate()
+                .scaleX(1.2f)
+                .scaleY(1.2f)
+                .setDuration(150)
+                .withEndAction {
+                    ivFavoriteIcon.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .setDuration(150)
+                        .start()
+                }
+                .start()
+        } else {
+            ivFavoriteIcon.setImageResource(R.drawable.ic_favorite_border)
+        }
     }
 
     private fun updateVisibilityBasedOnStatus(position: Int) {
@@ -185,21 +280,21 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
             0 -> { // Por leer
                 ratingContainer.visibility = View.GONE
                 reviewContainer.visibility = View.GONE
-                cbFavorite.visibility = View.GONE
+                favoriteContainer.visibility = View.GONE  // ✅ CAMBIAR
                 startDateContainer.visibility = View.GONE
                 finishDateContainer.visibility = View.GONE
             }
             1 -> { // Leyendo
                 ratingContainer.visibility = View.GONE
                 reviewContainer.visibility = View.GONE
-                cbFavorite.visibility = View.GONE
+                favoriteContainer.visibility = View.GONE  // ✅ CAMBIAR
                 startDateContainer.visibility = View.VISIBLE
                 finishDateContainer.visibility = View.GONE
             }
             2 -> { // Terminado
                 ratingContainer.visibility = View.VISIBLE
                 reviewContainer.visibility = View.VISIBLE
-                cbFavorite.visibility = View.VISIBLE
+                favoriteContainer.visibility = View.VISIBLE  // ✅ CAMBIAR
                 startDateContainer.visibility = View.VISIBLE
                 finishDateContainer.visibility = View.VISIBLE
             }
@@ -292,7 +387,9 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
 
         ratingBar.rating = book.rating?.toFloat() ?: 0f
         etReview.setText(book.review ?: "")
-        cbFavorite.isChecked = book.isFavorite
+        //cbFavorite.isChecked = book.isFavorite
+        isFavorite = book.isFavorite
+        updateFavoriteIcon()
 
         // Cargar fechas
         startDateMillis = book.startDate
@@ -339,7 +436,9 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
                     viewModel.updateBookReview(book.id, review)
                 }
 
-                viewModel.toggleFavorite(book.id, cbFavorite.isChecked)
+                //viewModel.toggleFavorite(book.id, cbFavorite.isChecked)
+                viewModel.toggleFavorite(book.id, isFavorite)
+
             }
             ReadingStatus.TO_READ -> {
                 // Si vuelve a "Por leer", limpiar fechas (usar 0L como marcador de 'sin fecha')
@@ -351,6 +450,42 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
         }
 
         dismiss()
+    }
+
+    private fun shareBook(book: Book) {
+        lifecycleScope.launch {
+            try {
+                // Mostrar loading
+                val progressDialog = AlertDialog.Builder(requireContext())
+                    .setMessage("Creando imagen...")
+                    .setCancelable(false)
+                    .create()
+                progressDialog.show()
+
+                // Crear imagen
+                val shareHelper = ShareBookHelper(requireContext())
+                val imageUri = shareHelper.createShareImage(book)
+
+                progressDialog.dismiss()
+
+                if (imageUri != null) {
+                    shareHelper.shareBook(imageUri, book)
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Error al crear imagen",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
+            } catch (e: Exception) {
+                Toast.makeText(
+                    requireContext(),
+                    "Error: ${e.localizedMessage}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     override fun getTheme(): Int {

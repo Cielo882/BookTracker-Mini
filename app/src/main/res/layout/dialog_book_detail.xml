@@ -276,18 +276,35 @@
 
         </LinearLayout>
 
-        <!-- Favorito -->
-        <CheckBox
-            android:id="@+id/cbFavorite"
-            android:layout_width="wrap_content"
+        <!-- Favorito con ícono de corazón -->
+        <LinearLayout
+            android:id="@+id/favoriteContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Marcar como favorito"
-            android:textSize="@dimen/text_body"
-            android:textColor="?attr/colorOnSurface"
-            android:minHeight="@dimen/checkbox_height"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="?attr/selectableItemBackground"
+            android:padding="12dp"
             android:layout_marginBottom="@dimen/spacing_large"
-            android:buttonTint="?attr/colorPrimary"
-            android:visibility="gone" />
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/ivFavoriteIcon"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_favorite_border"
+                app:tint="@color/favorite_color"
+                android:layout_marginEnd="12dp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Marcar como favorito"
+                android:textSize="@dimen/text_body"
+                android:textColor="?attr/colorOnSurface" />
+
+        </LinearLayout>
 
         <!-- Botones -->
         <LinearLayout
@@ -318,6 +335,17 @@
                 style="@style/Button.Primary"/>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnShareBook"
+            style="@style/Widget.Material3.Button.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:text="Compartir"
+            android:visibility="gone"
+            app:icon="@drawable/ic_share"
+            app:backgroundTint="?attr/colorSecondary"
+            android:layout_marginStart="8dp" />
 
     </LinearLayout>
 
