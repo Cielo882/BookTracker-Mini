@@ -1,40 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navHeader"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
-    android:background="@drawable/nav_header_bg"
-    android:gravity="bottom"
+    android:layout_height="200dp"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:padding="24dp"
+    android:gravity="bottom"
     android:clickable="true"
-    android:focusable="true"
-    android:theme="@style/ThemeOverlay.AppCompat">
+    android:focusable="true">
 
-    <ImageView
-        android:id="@+id/ivProfileImage"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:contentDescription="@string/profile_image"
-        android:padding="8dp"
-        android:src="@drawable/ic_person_large" />
+    <!-- Avatar (dibujo o inicial) -->
+    <FrameLayout
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_marginBottom="16dp">
 
+        <!-- Imagen del dibujo personalizado -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardAvatarDrawing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="36dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="@android:color/white"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/ivAvatarDrawing"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:contentDescription="Avatar personalizado" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Inicial (fallback) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardAvatarInitial"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:cardCornerRadius="36dp"
+            app:cardElevation="6dp"
+            app:cardBackgroundColor="?attr/colorOnPrimary">
+
+            <TextView
+                android:id="@+id/tvAvatarInitial"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="L"
+                android:textSize="36sp"
+                android:textStyle="bold"
+                android:textColor="?attr/colorPrimary"
+                android:gravity="center" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </FrameLayout>
+
+    <!-- Nombre del usuario -->
     <TextView
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
         android:text="Lector Apasionado"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textSize="22sp"
+        android:textStyle="bold"
         android:textColor="?attr/colorOnPrimary"
-        android:textStyle="bold" />
+        android:maxLines="1"
+        android:ellipsize="end" />
 
+    <!-- Título dinámico según libros leídos -->
     <TextView
-        android:id="@+id/tvUserEmail"
+        android:id="@+id/tvReaderTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mi biblioteca personal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textColor="?attr/colorOnPrimary" />
+        android:text="Lector apasionado 🔥"
+        android:textSize="14sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:alpha="0.9"
+        android:layout_marginTop="4dp" />
+
+    <!-- Indicador de edición -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✏️ Toca para personalizar"
+        android:textSize="11sp"
+        android:textColor="?attr/colorOnPrimary"
+        android:alpha="0.7"
+        android:layout_marginTop="8dp" />
 
 </LinearLayout>

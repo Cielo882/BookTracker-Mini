@@ -10,6 +10,7 @@ import androidx.core.graphics.drawable.DrawableCompat.applyTheme
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.cielo.applibros.data.local.UserProfileHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import com.cielo.applibros.data.local.database.AppDatabase
@@ -30,6 +31,18 @@ import com.cielo.applibros.utils.AnalyticsHelper
 import com.cielo.applibros.utils.CrashlyticsHelper
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import android.content.Context
+import android.content.Intent
+import com.cielo.applibros.presentation.onboarding.OnboardingActivity
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import android.widget.EditText
+import com.google.android.material.card.MaterialCardView
+import androidx.appcompat.app.AlertDialog
+import android.view.View
+import com.cielo.applibros.data.local.UserProfile
+import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -59,6 +72,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         initializeFirebase()
 
+        // ✅ AGREGAR ESTO: Verificar si mostrar onboarding
+        if (OnboardingActivity.shouldShowOnboarding(this)) {
+            startActivity(Intent(this, OnboardingActivity::class.java))
+            finish()
+            return
+        }
+
         // AGREGAR: Cargar tema antes de setContentView
         settingsPreferences = SettingsPreferences(this)
         applyTheme(settingsPreferences.getSettings().themeMode)
@@ -72,6 +92,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setupToolbar()
         setupDrawer()
         setupBottomNavigation()
+        setupNavigationHeader()
+
 
         // Cargar el fragmento inicial
         if (savedInstanceState == null) {
@@ -205,6 +227,142 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             ThemeMode.SYSTEM -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
         }
         AppCompatDelegate.setDefaultNightMode(mode)
+    }
+    private fun setupNavigationHeader() {
+
+
+
+        val headerView = navigationView.getHeaderView(0)
+        val profileHelper = UserProfileHelper(this)
+        val profile = profileHelper.getProfile()
+
+        val ivDrawing = headerView.findViewById<ImageView>(R.id.ivAvatarDrawing)
+        val cardInitial = headerView.findViewById<MaterialCardView>(R.id.cardAvatarInitial)
+        val tvInitial = headerView.findViewById<TextView>(R.id.tvAvatarInitial)
+        val tvName = headerView.findViewById<TextView>(R.id.tvUserName)
+        val tvTitle = headerView.findViewById<TextView>(R.id.tvReaderTitle)
+
+        tvName.text = profile.name
+
+        // Mostrar avatar según configuración
+        if (!profile.useInitial && profile.avatarDrawing.isNotEmpty()) {
+            // Mostrar dibujo
+            try {
+                val decodedBytes = android.util.Base64.decode(profile.avatarDrawing, android.util.Base64.DEFAULT)
+                val bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                ivDrawing.setImageBitmap(bitmap)
+                ivDrawing.visibility = View.VISIBLE
+                cardInitial.visibility = View.GONE
+            } catch (e: Exception) {
+                // Fallback a inicial
+                showInitial(profile, tvInitial, cardInitial, ivDrawing)
+            }
+        } else {
+            // Mostrar inicial
+            showInitial(profile, tvInitial, cardInitial, ivDrawing)
+        }
+
+        // Actualizar título según libros
+        bookViewModel.finishedBooks.observe(this) { books ->
+            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val booksThisYear = books.count { book ->
+                book.finishDate?.let {
+                    val cal = Calendar.getInstance()
+                    cal.timeInMillis = it
+                    cal.get(Calendar.YEAR) == currentYear
+                } ?: false
+            }
+
+            tvTitle.text = profileHelper.getReaderTitle(booksThisYear)
+        }
+
+        headerView.setOnClickListener {
+            // Permitir redibujar avatar
+            showEditAvatarDialog()
+        }
+    }
+
+    private fun showInitial(
+        profile: UserProfile,
+        tvInitial: TextView,
+        cardInitial: MaterialCardView,
+        ivDrawing: ImageView
+    ) {
+        val profileHelper = UserProfileHelper(this)  // ✅ AGREGAR ESTA LÍNEA
+        tvInitial.text = profileHelper.getInitialFromName(profile.name)  // ✅ CAMBIAR ESTA
+        cardInitial.visibility = View.VISIBLE
+        ivDrawing.visibility = View.GONE
+    }
+
+    private fun showEditAvatarDialog() {
+        val options = arrayOf(
+            "✏️ Cambiar nombre",
+            "🎨 Redibujar avatar",
+            "🔤 Usar inicial"
+        )
+
+        AlertDialog.Builder(this)
+            .setTitle("Personalizar Perfil")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> showEditProfileDialog()
+                    1 -> showRedrawAvatarDialog()
+                    2 -> useInitialAvatar()
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun showEditProfileDialog() {
+        val profileHelper = UserProfileHelper(this)
+        val currentProfile = profileHelper.getProfile()
+
+        val input = EditText(this).apply {
+            setText(currentProfile.name)
+            hint = "Tu nombre"
+            setSingleLine()
+            setPadding(50, 30, 50, 30)  // ✅ AGREGAR padding
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Editar Nombre")
+            .setView(input)
+            .setPositiveButton("Guardar") { _, _ ->
+                val newName = input.text.toString().trim()
+                if (newName.isNotEmpty()) {
+                    profileHelper.saveProfile(
+                        name = newName,
+                        avatarDrawing = currentProfile.avatarDrawing,
+                        useInitial = currentProfile.useInitial
+                    )
+                    setupNavigationHeader()
+                    Toast.makeText(this, "✅ Perfil actualizado", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
+
+    private fun showRedrawAvatarDialog() {
+        // Ir al onboarding pero solo en la pantalla de avatar
+        val intent = Intent(this, OnboardingActivity::class.java)
+        intent.putExtra("only_avatar", true)
+        startActivity(intent)
+    }
+
+    private fun useInitialAvatar() {
+        val profileHelper = UserProfileHelper(this)
+        val profile = profileHelper.getProfile()
+
+        profileHelper.saveProfile(
+            name = profile.name,
+            avatarDrawing = "",
+            useInitial = true
+        )
+
+        setupNavigationHeader()
+        Toast.makeText(this, "✅ Usando inicial como avatar", Toast.LENGTH_SHORT).show()
     }
 
     private fun setupViews() {
