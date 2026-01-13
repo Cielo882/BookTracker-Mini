@@ -55,6 +55,15 @@
         <item name="android:minHeight">48dp</item>
     </style>
 
+    <style name="Button.Primary2" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">?attr/colorOutline</item>
+        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
     <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
         <item name="strokeColor">?attr/colorPrimary</item>
         <item name="android:textColor">?attr/colorPrimary</item>
@@ -63,6 +72,16 @@
         <item name="android:paddingHorizontal">24dp</item>
         <item name="android:minHeight">48dp</item>
     </style>
+
+    <style name="Button.Secondary2" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">?attr/colorOnSurfaceVariant</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingHorizontal">24dp</item>
+        <item name="android:minHeight">48dp</item>
+    </style>
+
 
     <style name="Button.Text" parent="Widget.Material3.Button.TextButton">
         <item name="android:textColor">?attr/colorPrimary</item>

@@ -33,6 +33,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.cielo.applibros.presentation.onboarding.OnboardingActivity
 import android.widget.ImageView
 import android.widget.TextView
@@ -65,6 +66,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var crashlyticsHelper: CrashlyticsHelper
 
     private lateinit var repository: BookRepositoryImpl
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -229,13 +231,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AppCompatDelegate.setDefaultNightMode(mode)
     }
     private fun setupNavigationHeader() {
-
-
-
         val headerView = navigationView.getHeaderView(0)
         val profileHelper = UserProfileHelper(this)
         val profile = profileHelper.getProfile()
 
+        val cardDrawing = headerView.findViewById<MaterialCardView>(R.id.cardAvatarDrawing)
         val ivDrawing = headerView.findViewById<ImageView>(R.id.ivAvatarDrawing)
         val cardInitial = headerView.findViewById<MaterialCardView>(R.id.cardAvatarInitial)
         val tvInitial = headerView.findViewById<TextView>(R.id.tvAvatarInitial)
@@ -244,32 +244,50 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         tvName.text = profile.name
 
+        // ✅ DEBUG: Ver qué se cargó
+        Log.d("MainActivity", "Loading profile:")
+        Log.d("MainActivity", "  Name: ${profile.name}")
+        Log.d("MainActivity", "  Use Initial: ${profile.useInitial}")
+        Log.d("MainActivity", "  Avatar Drawing length: ${profile.avatarDrawing.length}")
+
         // Mostrar avatar según configuración
         if (!profile.useInitial && profile.avatarDrawing.isNotEmpty()) {
+            Log.d("MainActivity", "Should show drawing")
+
             // Mostrar dibujo
             try {
-                val decodedBytes = android.util.Base64.decode(profile.avatarDrawing, android.util.Base64.DEFAULT)
-                val bitmap = android.graphics.BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+                val decodedBytes = android.util.Base64.decode(
+                    profile.avatarDrawing,
+                    android.util.Base64.DEFAULT
+                )
+                val bitmap = android.graphics.BitmapFactory.decodeByteArray(
+                    decodedBytes,
+                    0,
+                    decodedBytes.size
+                )
+
                 ivDrawing.setImageBitmap(bitmap)
-                ivDrawing.visibility = View.VISIBLE
+                cardDrawing.visibility = View.VISIBLE  // ✅ MOSTRAR CARD
                 cardInitial.visibility = View.GONE
+
             } catch (e: Exception) {
+                e.printStackTrace()
                 // Fallback a inicial
-                showInitial(profile, tvInitial, cardInitial, ivDrawing)
+                showInitial(profile, tvInitial, cardInitial, cardDrawing)
             }
         } else {
             // Mostrar inicial
-            showInitial(profile, tvInitial, cardInitial, ivDrawing)
+            showInitial(profile, tvInitial, cardInitial, cardDrawing)
         }
 
         // Actualizar título según libros
         bookViewModel.finishedBooks.observe(this) { books ->
-            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+            val currentYear = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
             val booksThisYear = books.count { book ->
                 book.finishDate?.let {
-                    val cal = Calendar.getInstance()
+                    val cal = java.util.Calendar.getInstance()
                     cal.timeInMillis = it
-                    cal.get(Calendar.YEAR) == currentYear
+                    cal.get(java.util.Calendar.YEAR) == currentYear
                 } ?: false
             }
 
@@ -277,7 +295,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
 
         headerView.setOnClickListener {
-            // Permitir redibujar avatar
             showEditAvatarDialog()
         }
     }
@@ -286,12 +303,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         profile: UserProfile,
         tvInitial: TextView,
         cardInitial: MaterialCardView,
-        ivDrawing: ImageView
+        cardDrawing: MaterialCardView  // ✅ CAMBIAR parámetro
     ) {
-        val profileHelper = UserProfileHelper(this)  // ✅ AGREGAR ESTA LÍNEA
-        tvInitial.text = profileHelper.getInitialFromName(profile.name)  // ✅ CAMBIAR ESTA
+        val profileHelper = UserProfileHelper(this)
+        tvInitial.text = profileHelper.getInitialFromName(profile.name)
         cardInitial.visibility = View.VISIBLE
-        ivDrawing.visibility = View.GONE
+        cardDrawing.visibility = View.GONE  // ✅ OCULTAR CARD
     }
 
     private fun showEditAvatarDialog() {
@@ -520,5 +537,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             bottomNavigation.menu.getItem(i).isChecked = false
         }
         bottomNavigation.menu.setGroupCheckable(0, true, true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupNavigationHeader()
     }
 }

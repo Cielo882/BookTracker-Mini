@@ -23,14 +23,14 @@
         android:text="BookTracker"
         android:textSize="36sp"
         android:textStyle="bold"
-        android:textColor="?attr/colorPrimary"
+        android:textColor="?attr/colorOnSurface"
         android:layout_marginBottom="16dp" />
 
     <!-- Subtítulo -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tu biblioteca personal"
+        android:text="Tu registro personal"
         android:textSize="18sp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textAlignment="center"
@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:text="Organiza tu colección, registra tu progreso y descubre tu próxima lectura favorita"
         android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textColor="?attr/colorOnSurface"
         android:textAlignment="center"
         android:gravity="center"
         android:lineSpacingMultiplier="1.3" />

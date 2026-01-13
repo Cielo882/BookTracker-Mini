@@ -2,6 +2,7 @@ package com.cielo.applibros.presentation.onboarding
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,12 +44,22 @@ class OnboardingAvatarFragment : Fragment() {
 
         setupColorButtons(view)
 
+        arguments?.getString(ARG_DRAWING)?.let { base64 ->
+            if (base64.isNotEmpty()) {
+                avatarView.setBitmapFromString(base64)
+                Log.d("AvatarFragment", "Avatar restored, len=${base64.length}")
+            }
+        }
         btnClear.setOnClickListener {
             avatarView.clear()
         }
 
         btnUseInitial.setOnClickListener {
-            (activity as? OnboardingActivity)?.setUseInitial(true)
+            val activity = activity as? OnboardingActivity ?: return@setOnClickListener
+
+            activity.setUseInitial(true)
+            activity.setAvatarDrawing("") // seguridad extra
+            activity.finishOnboarding()   // 🔥 AQUÍ ESTABA TODO
         }
     }
 
@@ -82,11 +93,30 @@ class OnboardingAvatarFragment : Fragment() {
         }
     }
 
+    fun getAvatarDrawing(): String {
+        return avatarView.getBitmapAsString()
+    }
 
     override fun onPause() {
         super.onPause()
-        // Guardar el dibujo
+
         val drawing = avatarView.getBitmapAsString()
-        (activity as? OnboardingActivity)?.setAvatarDrawing(drawing)
+
+        if (drawing.isNotEmpty()) {
+            (activity as? OnboardingActivity)?.setAvatarDrawing(drawing)
+        }
     }
+
+    companion object {
+        private const val ARG_DRAWING = "arg_drawing"
+
+        fun newInstance(drawing: String): OnboardingAvatarFragment {
+            return OnboardingAvatarFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_DRAWING, drawing)
+                }
+            }
+        }
+    }
+
 }

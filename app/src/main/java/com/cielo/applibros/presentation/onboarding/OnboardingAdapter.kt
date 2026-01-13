@@ -4,7 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class OnboardingAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+class OnboardingAdapter(
+    activity: FragmentActivity,
+    private val avatarDrawing: String
+) : FragmentStateAdapter(activity) {
 
     override fun getItemCount(): Int = 3
 
@@ -12,7 +15,7 @@ class OnboardingAdapter(activity: FragmentActivity) : FragmentStateAdapter(activ
         return when (position) {
             0 -> OnboardingWelcomeFragment()
             1 -> OnboardingNameFragment()
-            2 -> OnboardingAvatarFragment()
+            2 -> OnboardingAvatarFragment.newInstance(avatarDrawing)
             else -> OnboardingWelcomeFragment()
         }
     }

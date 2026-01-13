@@ -44,7 +44,7 @@
         <!-- Botón principal -->
         <Button
             android:id="@+id/btnNext"
-            style="@style/Button.Primary"
+            style="@style/Button.Primary2"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="Comenzar"
@@ -53,6 +53,8 @@
         <!-- Botón de saltar -->
         <TextView
             android:id="@+id/btnSkip"
+            style="@style/Button.Primary2"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

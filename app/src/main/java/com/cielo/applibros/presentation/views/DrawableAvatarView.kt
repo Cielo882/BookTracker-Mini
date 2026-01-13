@@ -3,6 +3,7 @@ package com.cielo.applibros.presentation.views
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import java.io.ByteArrayOutputStream
@@ -109,11 +110,54 @@ class DrawableAvatarView @JvmOverloads constructor(
 
     fun getBitmapAsString(): String {
         val bitmap = canvasBitmap ?: return ""
-        val stream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-        val byteArray = stream.toByteArray()
-        return android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT)
+
+        // ✅ VERIFICAR: Que el bitmap tenga contenido
+        if (bitmap.width == 0 || bitmap.height == 0) {
+            Log.d("DrawableAvatarView", "Bitmap has no size")
+            return ""
+        }
+
+        try {
+            val stream = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+            val byteArray = stream.toByteArray()
+
+            Log.d("DrawableAvatarView", "Bitmap size: ${byteArray.size} bytes")
+
+            return android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT)
+        } catch (e: Exception) {
+            Log.e("DrawableAvatarView", "Error encoding bitmap", e)
+            return ""
+        }
     }
+    fun setBitmapFromString(base64: String) {
+        try {
+            if (base64.isEmpty()) return
+
+            val decodedBytes = android.util.Base64.decode(
+                base64,
+                android.util.Base64.DEFAULT
+            )
+
+            val bitmap = BitmapFactory.decodeByteArray(
+                decodedBytes,
+                0,
+                decodedBytes.size
+            ) ?: return
+
+            // 🔧 MUY IMPORTANTE: copiar a bitmap mutable
+            canvasBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
+            drawCanvas = Canvas(canvasBitmap!!)
+
+            invalidate()
+
+            Log.d("DrawableAvatarView", "Bitmap restored successfully")
+
+        } catch (e: Exception) {
+            Log.e("DrawableAvatarView", "Error restoring bitmap", e)
+        }
+    }
+
 
     fun loadFromString(base64: String) {
         try {

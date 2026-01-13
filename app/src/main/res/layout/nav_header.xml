@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navHeader"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
+    android:layout_height="215dp"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
     android:padding="24dp"
@@ -26,7 +26,7 @@
             app:cardCornerRadius="36dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="@android:color/white"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/ivAvatarDrawing"
@@ -85,11 +85,12 @@
 
     <!-- Indicador de edición -->
     <TextView
+        android:id="@+id/tvEditProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="✏️ Toca para personalizar"
         android:textSize="11sp"
-        android:textColor="?attr/colorOnPrimary"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:alpha="0.7"
         android:layout_marginTop="8dp" />
 

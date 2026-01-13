@@ -16,21 +16,23 @@ class UserProfileHelper(context: Context) {
         context.getSharedPreferences("user_profile", Context.MODE_PRIVATE)
 
     fun saveProfile(
-        name: String,
-        avatarDrawing: String = "",
-        useInitial: Boolean = true
+        name: String? = null,
+        avatarDrawing: String? = null,
+        useInitial: Boolean? = null
     ) {
+        val current = getProfile()
+
         prefs.edit().apply {
-            putString("name", name)
-            putString("avatar_drawing", avatarDrawing)
-            putBoolean("use_initial", useInitial)
+            putString("name", name ?: current.name)
+            putString("avatar_drawing", avatarDrawing ?: current.avatarDrawing)
+            putBoolean("use_initial", useInitial ?: current.useInitial)
+
             if (!prefs.contains("member_since")) {
                 putLong("member_since", System.currentTimeMillis())
             }
             apply()
         }
     }
-
     fun getProfile(): UserProfile {
         return UserProfile(
             name = prefs.getString("name", "Lector Apasionado") ?: "Lector Apasionado",

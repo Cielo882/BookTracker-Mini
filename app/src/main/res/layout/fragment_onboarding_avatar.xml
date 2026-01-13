@@ -124,14 +124,24 @@
         </LinearLayout>
 
         <!-- Botón borrar -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnClear"
-            style="@style/Button.Secondary"
+            style="@style/Button.Primary2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🗑️ Borrar todo"
+
+            app:icon="@drawable/ic_delete"
+            app:iconSize="25dp"
+
+            app:iconTint="?attr/colorOnSurface"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp"
+
+            android:text="Borrar dibujo"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="19sp"
             android:layout_marginBottom="24dp" />
+
 
         <!-- Divider -->
         <View
@@ -151,7 +161,7 @@
 
         <Button
             android:id="@+id/btnUseInitial"
-            style="@style/Button.Primary"
+            style="@style/Button.Secondary2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Usar mi inicial"
