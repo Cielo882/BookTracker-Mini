@@ -4,18 +4,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navHeader"
     android:layout_width="match_parent"
-    android:layout_height="215dp"
+    android:layout_height="240dp"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
-    android:padding="24dp"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp"
+    android:paddingTop="48dp"
     android:gravity="bottom"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:fitsSystemWindows="true">
 
     <!-- Avatar (dibujo o inicial) -->
     <FrameLayout
-        android:layout_width="72dp"
-        android:layout_height="72dp"
+        android:layout_width="88dp"
+        android:layout_height="88dp"
         android:layout_marginBottom="16dp">
 
         <!-- Imagen del dibujo personalizado -->
@@ -23,7 +27,7 @@
             android:id="@+id/cardAvatarDrawing"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="36dp"
+            app:cardCornerRadius="44dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="@android:color/white"
             android:visibility="visible">
@@ -32,7 +36,7 @@
                 android:id="@+id/ivAvatarDrawing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 android:contentDescription="Avatar personalizado" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -42,7 +46,7 @@
             android:id="@+id/cardAvatarInitial"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:cardCornerRadius="36dp"
+            app:cardCornerRadius="44dp"
             app:cardElevation="6dp"
             app:cardBackgroundColor="?attr/colorOnPrimary">
 
@@ -51,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="L"
-                android:textSize="36sp"
+                android:textSize="44sp"
                 android:textStyle="bold"
                 android:textColor="?attr/colorPrimary"
                 android:gravity="center" />

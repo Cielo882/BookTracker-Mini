@@ -33,6 +33,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.util.Log
 import com.cielo.applibros.presentation.onboarding.OnboardingActivity
 import android.widget.ImageView
@@ -232,6 +233,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun setupNavigationHeader() {
         val headerView = navigationView.getHeaderView(0)
+
+        // ✅ AGREGAR: Ajustar padding para el notch
+        headerView.setOnApplyWindowInsetsListener { view, insets ->
+            val statusBarHeight = insets.systemWindowInsetTop
+            view.setPadding(
+                view.paddingLeft,
+                statusBarHeight + 24, // Padding top + altura de status bar
+                view.paddingRight,
+                view.paddingBottom
+            )
+            insets
+        }
+
         val profileHelper = UserProfileHelper(this)
         val profile = profileHelper.getProfile()
 
@@ -260,11 +274,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     profile.avatarDrawing,
                     android.util.Base64.DEFAULT
                 )
-                val bitmap = android.graphics.BitmapFactory.decodeByteArray(
+                var bitmap = android.graphics.BitmapFactory.decodeByteArray(
                     decodedBytes,
                     0,
                     decodedBytes.size
                 )
+
+                val targetSize = (72 * resources.displayMetrics.density).toInt() // 72dp en px
+                bitmap = Bitmap.createScaledBitmap(bitmap, targetSize, targetSize, true)
 
                 ivDrawing.setImageBitmap(bitmap)
                 cardDrawing.visibility = View.VISIBLE  // ✅ MOSTRAR CARD
