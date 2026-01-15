@@ -30,7 +30,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:fitsSystemWindows="true"
                 android:background="?attr/colorPrimary"
-                app:title="BookTracker"
+                app:title="BookTracker Mini"
                 app:titleTextColor="?attr/colorOnPrimary"
                 app:navigationIcon="@drawable/ic_menu" />
 

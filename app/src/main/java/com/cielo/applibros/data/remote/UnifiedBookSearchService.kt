@@ -7,111 +7,100 @@ import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.Language
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
-
 class UnifiedBookSearchService(
     private val gutendexApi: GutendexApiService,
     private val openLibraryApi: OpenLibraryApiService,
     private val googleBooksApi: GoogleBooksApiService
 ) {
 
-    // AGREGAR parámetro de idioma
-    suspend fun searchBooks(query: String, language: Language = Language.SPANISH): List<Book> = coroutineScope {
-        val results = mutableListOf<Book>()
+    suspend fun searchBooks(
+        query: String,
+        language: Language = Language.SPANISH
+    ): List<Book> = coroutineScope {
 
-        // Buscar en paralelo
         val gutendexDeferred = async { searchGutendex(query) }
         val openLibraryDeferred = async { searchOpenLibrary(query) }
         val googleBooksDeferred = async { searchGoogleBooks(query) }
 
-        try {
-            results.addAll(gutendexDeferred.await())
-        } catch (e: Exception) { }
+        val results = mutableListOf<Book>()
+        val errors = mutableListOf<Throwable>()
 
-        try {
-            results.addAll(openLibraryDeferred.await())
-        } catch (e: Exception) { }
+        listOf(
+            gutendexDeferred,
+            openLibraryDeferred,
+            googleBooksDeferred
+        ).forEach { deferred ->
+            try {
+                results.addAll(deferred.await())
+            } catch (t: Throwable) {
+                errors.add(t)
+            }
+        }
 
-        try {
-            results.addAll(googleBooksDeferred.await())
-        } catch (e: Exception) { }
+        // ❌ TODAS las APIs fallaron → error real
+        if (results.isEmpty() && errors.isNotEmpty()) {
+            throw errors.first()
+        }
 
-        // FILTRAR por idioma
+        // ✅ Filtrar por idioma
         val filteredResults = results.filter { book ->
             book.languages.any { it.contains(language.code, ignoreCase = true) }
         }
 
-        // Si no hay resultados en el idioma específico, devolver todos
         val finalResults = filteredResults.ifEmpty { results }
 
-        // Eliminar duplicados
-        finalResults.distinctBy { "${it.title.lowercase()}_${it.authorsString.lowercase()}" }
+        finalResults.distinctBy {
+            "${it.title.lowercase()}_${it.authorsString.lowercase()}"
+        }
     }
 
+    // ⬇️ SIN try/catch ⬇️
+
     private suspend fun searchGutendex(query: String): List<Book> {
-        return try {
-            val response = gutendexApi.searchBooks(query)
-            response.results.map { dto ->
-                Book(
-                    id = dto.id,
-                    title = dto.title,
-                    authors = dto.authors.map { it.name },
-                    subjects = dto.subjects,
-                    languages = dto.languages,
-                    formats = dto.formats
-                )
-            }
-        } catch (e: Exception) {
-            emptyList()
+        val response = gutendexApi.searchBooks(query)
+        return response.results.map { dto ->
+            Book(
+                id = dto.id,
+                title = dto.title,
+                authors = dto.authors.map { it.name },
+                subjects = dto.subjects,
+                languages = dto.languages,
+                formats = dto.formats
+            )
         }
     }
 
     private suspend fun searchOpenLibrary(query: String): List<Book> {
-        return try {
-            val response = openLibraryApi.searchBooks(query)
-            response.docs.mapIndexed { index, dto ->
-                // Generar ID único basado en OpenLibrary
-                val bookId = dto.key.hashCode() + 1000000 // Offset para evitar conflictos
-
-                Book(
-                    id = bookId,
-                    title = dto.title ?: "Unknown",
-                    authors = dto.authorName ?: listOf("Unknown"),
-                    subjects = dto.subject?.take(5) ?: emptyList(),
-                    languages = dto.language ?: emptyList(),
-                    formats = buildMap {
-                        dto.toCoverUrl()?.let { put("image/jpeg", it) }
-                    }
-                )
-            }
-        } catch (e: Exception) {
-            emptyList()
+        val response = openLibraryApi.searchBooks(query)
+        return response.docs.map { dto ->
+            Book(
+                id = dto.key.hashCode() + 1_000_000,
+                title = dto.title ?: "Unknown",
+                authors = dto.authorName ?: listOf("Unknown"),
+                subjects = dto.subject?.take(5) ?: emptyList(),
+                languages = dto.language ?: emptyList(),
+                formats = buildMap {
+                    dto.toCoverUrl()?.let { put("image/jpeg", it) }
+                }
+            )
         }
     }
 
     private suspend fun searchGoogleBooks(query: String): List<Book> {
-        return try {
-            val response = googleBooksApi.searchBooks(query)
-            response.items?.mapIndexed { index, item ->
-                // Generar ID único basado en Google Books
-                val bookId = item.id.hashCode() + 2000000 // Offset diferente
-
-                Book(
-                    id = bookId,
-                    title = item.volumeInfo.title ?: "Unknown",
-                    authors = item.volumeInfo.authors ?: listOf("Unknown"),
-                    subjects = item.volumeInfo.categories ?: emptyList(),
-                    languages = item.volumeInfo.language?.let { listOf(it) } ?: emptyList(),
-                    formats = buildMap {
-                        item.volumeInfo.imageLinks?.thumbnail?.let {
-                            // Convertir a HTTPS y quitar zoom
-                            val httpsUrl = it.replace("http://", "https://")
-                            put("image/jpeg", httpsUrl)
-                        }
-                    }
-                )
-            } ?: emptyList()
-        } catch (e: Exception) {
-            emptyList()
-        }
+        val response = googleBooksApi.searchBooks(query)
+        return response.items?.map { item ->
+            Book(
+                id = item.id.hashCode() + 2_000_000,
+                title = item.volumeInfo.title ?: "Unknown",
+                authors = item.volumeInfo.authors ?: listOf("Unknown"),
+                subjects = item.volumeInfo.categories ?: emptyList(),
+                languages = item.volumeInfo.language?.let { listOf(it) } ?: emptyList(),
+                formats = buildMap {
+                    item.volumeInfo.imageLinks?.thumbnail
+                        ?.replace("http://", "https://")
+                        ?.let { put("image/jpeg", it) }
+                }
+            )
+        } ?: emptyList()
     }
 }

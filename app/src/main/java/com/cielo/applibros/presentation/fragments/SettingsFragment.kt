@@ -1,6 +1,7 @@
 package com.cielo.applibros.presentation.fragments
 
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -55,6 +57,13 @@ class SettingsFragment : Fragment() {
     // Variables para guardar las selecciones temporales
     private var tempLanguage: Language? = null
     private var tempTheme: ThemeMode? = null
+
+    private val PRIVACY_POLICY_URL =
+        "https://cielo882.github.io/BookTrackerMini-legal/privacy"
+
+    private val TERMS_URL =
+        "https://cielo882.github.io/BookTrackerMini-legal/terms"
+
 
     private val exportLauncher = registerForActivityResult(
         ActivityResultContracts.CreateDocument("application/json")
@@ -250,6 +259,14 @@ class SettingsFragment : Fragment() {
             updateAcceptButtonState()
         }
 
+        view?.findViewById<TextView>(R.id.tvPrivacyPolicy)?.setOnClickListener {
+            openUrl(PRIVACY_POLICY_URL)
+        }
+
+        view?.findViewById<TextView>(R.id.tvTerms)?.setOnClickListener {
+            openUrl(TERMS_URL)
+        }
+
         // Listener para tema - solo guarda temporalmente
         rgTheme.setOnCheckedChangeListener { _, checkedId ->
             tempTheme = when (checkedId) {
@@ -363,6 +380,12 @@ class SettingsFragment : Fragment() {
             }
             .show()
     }
+
+    private fun openUrl(url: String) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
+
 
     private fun setupFirebaseTestButtons(view: View) {
 

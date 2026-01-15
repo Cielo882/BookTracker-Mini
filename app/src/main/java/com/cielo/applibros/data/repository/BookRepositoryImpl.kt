@@ -1,15 +1,20 @@
 // data/repository/BookRepositoryImpl.kt
 package com.cielo.applibros.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.map
 import com.cielo.applibros.data.local.dao.BookDao
 import com.cielo.applibros.data.local.entities.BookEntity
 import com.cielo.applibros.data.local.preferences.SettingsPreferences
 import com.cielo.applibros.data.remote.UnifiedBookSearchService
+import com.cielo.applibros.domain.model.AppError
 import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.ReadingStatus
 import com.cielo.applibros.domain.repository.BookRepository
+import com.cielo.applibros.domain.model.Result
+import com.cielo.applibros.utils.ErrorMapper
+
 
 class BookRepositoryImpl(
     private val unifiedSearchService: UnifiedBookSearchService, // CAMBIO
@@ -17,12 +22,27 @@ class BookRepositoryImpl(
     private val settingsPreferences: SettingsPreferences // Add this line
 ) : BookRepository {
 
-    override suspend fun searchBooks(query: String): List<Book> {
-        // OBTENER idioma desde SharedPreferences
-        val language = settingsPreferences.getSettings().language
+    override suspend fun searchBooks(query: String): Result<List<Book>> {
+        return try {
+            val language = settingsPreferences.getSettings().language
+            val books = unifiedSearchService.searchBooks(query, language)
 
-        return unifiedSearchService.searchBooks(query, language)
+            // 👇 solo si la API RESPONDIÓ correctamente
+            if (books.isEmpty()) {
+                Result.Error(AppError.NoResultsError())
+            } else {
+                Result.Success(books)
+            }
+
+        }catch (t: Throwable) {
+            Log.e("Repository", "ERROR REAL", t)
+            Result.Error(ErrorMapper.mapToAppError(t))
+        }
     }
+
+
+
+
 
     // ... resto de métodos igual ...
     override suspend fun addToReadList(book: Book) {

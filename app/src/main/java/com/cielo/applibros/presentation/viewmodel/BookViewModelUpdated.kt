@@ -27,6 +27,10 @@ import com.cielo.applibros.utils.CrashlyticsHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.cielo.applibros.domain.model.Result
+import com.cielo.applibros.domain.model.AppError
+import com.cielo.applibros.utils.ErrorMapper
+
 
 class BookViewModelUpdated(
     private val getBooksUseCase: GetBooksUseCase,
@@ -46,8 +50,8 @@ class BookViewModelUpdated(
     private val getAllBooksUseCase: GetAllBooksUseCase,
     private val importBooksUseCase: ImportBooksUseCase,
     private val clearAllBooksUseCase: ClearAllBooksUseCase,
-    private val analyticsHelper: AnalyticsHelper,  // ✅ AGREGAR
-    private val crashlyticsHelper: CrashlyticsHelper  // ✅ AGREGAR
+    private val analyticsHelper: AnalyticsHelper,
+    private val crashlyticsHelper: CrashlyticsHelper
 ) : ViewModel() {
 
     // LiveData para resultados de búsqueda
@@ -60,8 +64,9 @@ class BookViewModelUpdated(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _error = MutableLiveData<String?>()
-    val error: LiveData<String?> = _error
+    private val _error = MutableLiveData<AppError?>()
+    val error: LiveData<AppError?> = _error
+
 
     // LiveData observables directos de la base de datos
     val booksToRead: LiveData<List<Book>> = getBooksToReadUseCase.observeBooksToRead()
@@ -71,22 +76,32 @@ class BookViewModelUpdated(
     // Métodos existentes
     fun searchBooks(query: String) {
         viewModelScope.launch {
-            try {
-                _isLoading.value = true
-                _error.value = null
-                val result = getBooksUseCase(query)
-                _books.value = result
-                analyticsHelper.logBookSearch(query, result.size)
+            _isLoading.value = true
+            _error.value = null
 
-            } catch (e: Exception) {
-                _error.value = e.message
-                crashlyticsHelper.logNetworkError("search", e.message ?: "Unknown error")
+            when (val result = getBooksUseCase(query)) {
 
-            } finally {
-                _isLoading.value = false
+                is Result.Success -> {
+                    _books.value = result.data
+                    analyticsHelper.logBookSearch(query, result.data.size)
+                }
+
+                is Result.Error -> {
+                    _books.value = emptyList()
+                    _error.value = result.error
+                    crashlyticsHelper.logException(
+                        (result.error.cause ?: Exception(result.error.message)) as java.lang.Exception,
+                        "searchBooks"
+                    )
+                }
+
+                Result.Loading -> Unit
             }
+
+            _isLoading.value = false
         }
     }
+
 
     fun loadReadBooks() {
         viewModelScope.launch {
@@ -94,7 +109,7 @@ class BookViewModelUpdated(
                 val result = getReadBooksUseCase()
                 _readBooks.value = result
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
             }
         }
     }
@@ -111,7 +126,7 @@ class BookViewModelUpdated(
                 // ✅ AGREGAR: Log acción en Crashlytics
                 crashlyticsHelper.logUserAction("Book Added", book.title)
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
                 // ✅ AGREGAR: Log error
                 crashlyticsHelper.logException(e, "addToRead")
             }
@@ -124,7 +139,7 @@ class BookViewModelUpdated(
                 removeFromReadUseCase(book)
                 loadReadBooks()
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
             }
         }
     }
@@ -138,7 +153,7 @@ class BookViewModelUpdated(
                 analyticsHelper.logFeatureUsed("book_rated_$rating")
 
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
                 crashlyticsHelper.logException(e, "updateBookRating")
 
             }
@@ -159,7 +174,7 @@ class BookViewModelUpdated(
                     analyticsHelper.logFeatureUsed("book_finished")
                 }
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
                 crashlyticsHelper.logException(e, "updateBookStatus")
 
             }
@@ -171,7 +186,7 @@ class BookViewModelUpdated(
             try {
                 updateBookReviewUseCase(bookId, review)
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
             }
         }
     }
@@ -181,7 +196,7 @@ class BookViewModelUpdated(
             try {
                 toggleFavoriteUseCase(bookId, isFavorite)
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
             }
         }
     }
@@ -191,20 +206,27 @@ class BookViewModelUpdated(
             try {
                 updateStartDateUseCase(bookId, startDate)
             } catch (e: Exception) {
-                _error.value = e.message
+                _error.value = e.message as AppError?
             }
         }
     }
 
     fun updateFinishDate(bookId: Int, finishDate: Long) {
         viewModelScope.launch {
-            try {
-                updateFinishDateUseCase(bookId, finishDate)
-            } catch (e: Exception) {
-                _error.value = e.message
+            when (val result = updateFinishDateUseCase(bookId, finishDate)) {
+                is Result.Error -> {
+                    _error.value = result.error
+                    crashlyticsHelper.logException(
+                        (result.error.cause ?: Exception()) as java.lang.Exception,
+                        "updateFinishDate"
+                    )
+                }
+                is Result.Success -> Unit
+                Result.Loading -> Unit
             }
         }
     }
+
 
     // Método para cargar libros por estado (opcional, ya que las LiveData se actualizan automáticamente)
     fun loadBooksByStatus(status: ReadingStatus) {
@@ -216,7 +238,7 @@ class BookViewModelUpdated(
             try {
                 getAllBooksUseCase.execute()
             } catch (e: Exception) {
-                _error.value = "Error al obtener libros: ${e.message}"
+                _error.value = ErrorMapper.mapToAppError(e)
                 emptyList()
             }
         }
@@ -232,7 +254,7 @@ class BookViewModelUpdated(
 
                 _isLoading.value = false
             } catch (e: Exception) {
-                _error.value = "Error al importar: ${e.message}"
+                _error.value = ErrorMapper.mapToAppError(e)
                 _isLoading.value = false
             }
         }

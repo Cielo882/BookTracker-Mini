@@ -537,12 +537,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun showAboutDialog() {
         androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Acerca de BookTracker")
+            .setTitle("Acerca de BookTracker Mini")
             .setMessage(
                 "BookTracker v2.0\n\n" +
                         "Tu BookTracker personal para organizar y rastrear tus lecturas.\n\n" +
-                        "Desarrollado con ❤️ por Simple Apps.\n\n" +
-                        "© 2024 Simple Apps. Todos los derechos reservados."
+                        "Desarrollado con ❤️ por Mini Apps.\n\n" +
+                        "© 2025 Mini Apps."
             )
             .setPositiveButton("Cerrar", null)
             .show()

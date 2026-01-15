@@ -3,10 +3,11 @@ package com.cielo.applibros.domain.repository
 import androidx.lifecycle.LiveData
 import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.ReadingStatus
+import com.cielo.applibros.domain.model.Result
 
 interface BookRepository {
     // Métodos existentes
-    suspend fun searchBooks(query: String): List<Book>
+    suspend fun searchBooks(query: String): Result<List<Book>>
     suspend fun getReadBooks(): List<Book>
     suspend fun addToReadList(book: Book)
     suspend fun removeFromReadList(book: Book)

@@ -13,9 +13,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cielo.applibros.MainActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.cielo.applibros.R
+import com.cielo.applibros.domain.model.AppError
 import com.cielo.applibros.domain.model.ReadingStatus
 import com.cielo.applibros.presentation.adapter.SearchBookAdapter
 import com.cielo.applibros.presentation.viewmodel.BookViewModelUpdated
+import com.cielo.applibros.utils.ErrorHandler
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class SearchFragment : Fragment() {
@@ -29,6 +31,8 @@ class SearchFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var emptyState: LinearLayout
     private var existingBookIds: Set<Int> = emptySet()
+
+    private var networkDialogShown = false
 
 
     override fun onCreateView(
@@ -105,9 +109,37 @@ class SearchFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
-                showError(it)
+
+                when (it) {
+                    is AppError.NetworkError -> {
+                        if (!networkDialogShown) {
+                            networkDialogShown = true
+                            ErrorHandler.showErrorDialog(
+                                context = requireContext(),
+                                error = it,
+                                onRetry = {
+                                    networkDialogShown = false
+                                    viewModel.searchBooks(etSearch.text.toString())
+                                },
+                                onDismiss = {
+                                    networkDialogShown = false
+                                }
+                            )
+                        }
+                    }
+
+
+                    else -> {
+                        ErrorHandler.showErrorSnackbar(
+                            view = requireView(),
+                            error = it
+                        )
+                    }
+                }
             }
         }
+
+
     }
 
     private fun setupListeners() {
