@@ -23,7 +23,7 @@ interface BookRepository {
     fun getFinishedBooks(): LiveData<List<Book>>
 
 
-    // ✅ NUEVO: Método suspendido para obtener lista directa
+    //  NUEVO: Método suspendido para obtener lista directa
     suspend fun getFinishedBooksList(): List<Book>
 
     suspend fun updateReadingStatus(bookId: Int, status: ReadingStatus)

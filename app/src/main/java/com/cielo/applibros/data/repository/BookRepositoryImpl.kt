@@ -146,7 +146,7 @@ class BookRepositoryImpl(
         bookDao.deleteAllBooks()
     }
 
-    // ✅ NUEVO: Método suspendido
+    //  NUEVO: Método suspendido
     override suspend fun getFinishedBooksList(): List<Book> {
         return bookDao.getFinishedBooksList().map { it.toDomainModel() }
     }

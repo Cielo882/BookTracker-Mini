@@ -78,7 +78,7 @@ interface BookDao {
     @Query("UPDATE books SET finishDate = :finishDate WHERE id = :bookId")
     suspend fun updateFinishDate(bookId: Int, finishDate: Long?)
 
-    // ✅ AGREGAR ESTE MÉTODO NUEVO (versión suspendida)
+    //  AGREGAR ESTE MÉTODO NUEVO (versión suspendida)
     @Query("SELECT * FROM books WHERE readingStatus = 'FINISHED' ORDER BY finishDate DESC")
     suspend fun getFinishedBooksList(): List<BookEntity>
 

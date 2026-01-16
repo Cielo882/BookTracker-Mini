@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +13,12 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import com.cielo.applibros.MainActivity
 import com.cielo.applibros.R
+import com.cielo.applibros.domain.model.Book
 import com.cielo.applibros.domain.model.ReadingStatus
 import com.cielo.applibros.presentation.adapter.BookAdapter
 import com.cielo.applibros.presentation.dialogs.BookDetailDialogFragment
 import com.cielo.applibros.presentation.viewmodel.BookViewModelUpdated
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class ReadingFragment : Fragment() {
 
@@ -93,12 +96,14 @@ class ReadingFragment : Fragment() {
                 val dialog = BookDetailDialogFragment.newInstance(book)
                 dialog.show(parentFragmentManager, "book_detail")
             },
-            onStatusClick = { book ->
-                // Cambiar de READING a FINISHED
-                viewModel.updateBookStatus(book.id, ReadingStatus.FINISHED)
+            onDeleteClick = { book -> // NUEVO
+                showDeleteConfirmation(book)
             },
             onRatingChanged = { book, rating ->
                 viewModel.updateBookRating(book.id, rating.toInt())
+            },
+            onFavoriteClick = { book ->
+                viewModel.toggleFavorite(book.id, !book.isFavorite)
             }
         )
 
@@ -124,6 +129,18 @@ class ReadingFragment : Fragment() {
                 emptyAnimation.cancelAnimation()
             }
         }
+    }
+
+    private fun showDeleteConfirmation(book: Book) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Eliminar libro")
+            .setMessage("¿Estás seguro de que deseas eliminar \"${book.title}\" de tu biblioteca?")
+            .setPositiveButton("Eliminar") { _, _ ->
+                viewModel.removeFromRead(book)
+                Toast.makeText(requireContext(), "Libro eliminado", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     override fun onPause() {

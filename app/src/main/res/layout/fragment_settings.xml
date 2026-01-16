@@ -251,7 +251,7 @@
                     style="@style/Button.Secondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="✅ Probar Analytics"
+                    android:text=" Probar Analytics"
                     android:textSize="16sp"
 
                     android:layout_marginBottom="8dp" />

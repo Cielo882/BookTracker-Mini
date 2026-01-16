@@ -120,14 +120,14 @@ class BookViewModelUpdated(
                 addToReadUseCase(book)
                 // Las LiveData se actualizarán automáticamente
 
-                // ✅ AGREGAR: Log evento en Analytics
+                //  AGREGAR: Log evento en Analytics
                 analyticsHelper.logBookAdded(book, ReadingStatus.TO_READ)
 
-                // ✅ AGREGAR: Log acción en Crashlytics
+                //  AGREGAR: Log acción en Crashlytics
                 crashlyticsHelper.logUserAction("Book Added", book.title)
             } catch (e: Exception) {
                 _error.value = e.message as AppError?
-                // ✅ AGREGAR: Log error
+                //  AGREGAR: Log error
                 crashlyticsHelper.logException(e, "addToRead")
             }
         }
@@ -166,7 +166,7 @@ class BookViewModelUpdated(
             try {
                 updateBookStatusUseCase(bookId, status)
                 // Las LiveData se actualizarán automáticamente
-                // ✅ AGREGAR: Log cambio de estado
+                //  AGREGAR: Log cambio de estado
                 analyticsHelper.logFeatureUsed("status_changed_to_${status.name}")
                 // Registrar si se terminó un libro
                 if (status == ReadingStatus.FINISHED) {

@@ -36,7 +36,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // ✅ AGREGAR: Habilitar Crashlytics mapping para release
+            //  AGREGAR: Habilitar Crashlytics mapping para release
             configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
                 mappingFileUploadEnabled = true
             }
@@ -44,7 +44,7 @@ android {
 
         debug {
 
-            // ✅ AGREGAR: Deshabilitar en debug
+            //  AGREGAR: Deshabilitar en debug
             configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
                 mappingFileUploadEnabled = false
             }
@@ -119,7 +119,7 @@ dependencies {
     // Lottie para animaciones
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    // ✅ AGREGAR: Firebase (usando BoM)
+    //  AGREGAR: Firebase (usando BoM)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)

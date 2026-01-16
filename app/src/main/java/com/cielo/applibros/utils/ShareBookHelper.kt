@@ -59,7 +59,7 @@ class ShareBookHelper(private val context: Context) {
     }
     private fun drawBackground(canvas: Canvas, width: Int, height: Int) {
         try {
-            // ✅ Cargar imagen de fondo desde recursos
+            //  Cargar imagen de fondo desde recursos
             val backgroundBitmap = BitmapFactory.decodeResource(
                 context.resources,
                 R.drawable.profile_pattern // o el nombre de tu drawable

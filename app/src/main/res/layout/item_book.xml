@@ -9,134 +9,149 @@
     app:cardElevation="4dp"
     app:cardBackgroundColor="?attr/colorSurface">
 
-    <LinearLayout
+    <!-- FrameLayout para posicionar botones flotantes sobre la card -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="12dp">
+        android:layout_height="wrap_content">
 
-        <!-- Imagen de portada -->
-        <ImageView
-            android:id="@+id/ivCover"
-            android:layout_width="80dp"
-            android:layout_height="120dp"
-            android:scaleType="centerCrop"
-            android:background="@drawable/book_placeholder_bg"
-            android:layout_marginEnd="12dp" />
-
-        <!-- Contenido del libro -->
+        <!-- Contenido principal -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-            <!-- Título -->
-            <TextView
-                android:id="@+id/tvTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:textColor="?attr/colorOnSurface"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:layout_marginBottom="4dp" />
+            <!-- Imagen de portada -->
+            <ImageView
+                android:id="@+id/ivCover"
+                android:layout_width="80dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                android:background="@drawable/book_placeholder_bg"
+                android:layout_marginEnd="12dp" />
 
-            <!-- Autor -->
-            <TextView
-                android:id="@+id/tvAuthor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:layout_marginBottom="4dp" />
-
-            <!-- Estado -->
-            <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="?attr/colorOnSurface"
-                android:background="@drawable/status_badge_bg"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:layout_marginBottom="8dp" />
-
-            <!-- Rating (solo para libros terminados) -->
+            <!-- Contenido del libro -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:layout_marginBottom="4dp">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:stepSize="1"
-                    android:progressTint="@color/rating_gold"
-                    android:visibility="gone" />
-
+                <!-- Título -->
                 <TextView
-                    android:id="@+id/tvRatingText"
+                    android:id="@+id/tvTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="4dp" />
+
+                <!-- Autor -->
+                <TextView
+                    android:id="@+id/tvAuthor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:layout_marginBottom="4dp" />
+
+                <!-- Estado -->
+                <TextView
+                    android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
+                    android:textColor="?attr/colorOnSurface"
+                    android:background="@drawable/status_badge_bg"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp"
+                    android:layout_marginBottom="8dp" />
+
+                <!-- Rating (solo para libros terminados) -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="4dp">
+
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        style="@style/Widget.AppCompat.RatingBar.Small"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:numStars="5"
+                        android:stepSize="1"
+                        android:progressTint="@color/rating_gold"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvRatingText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        android:layout_marginStart="8dp"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+
+                <!-- Reseña (opcional) -->
+                <TextView
+                    android:id="@+id/tvReview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:layout_marginStart="8dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
                     android:visibility="gone" />
 
             </LinearLayout>
 
-            <!-- Reseña (opcional) -->
-            <TextView
-                android:id="@+id/tvReview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:textColor="?attr/colorOnSurfaceVariant"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:visibility="gone" />
-
         </LinearLayout>
 
-        <!-- Botones de acción -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+        <!-- Botón de cambiar estado - Esquina superior izquierda -->
+        <ImageView
+            android:id="@+id/ivStatus"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:elevation="4dp"
 
-            <!-- Botón de estado -->
+            app:tint="?attr/colorOnSurface" />
 
-            <!-- Botón de favorito (opcional) -->
+        <!-- Botón de eliminar - Esquina superior derecha -->
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end|top"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_delete"
+            android:background="@drawable/button_circle_bg_red"
+            android:elevation="4dp"
+            app:tint="@android:color/white" />
 
-            <ImageView
-                android:id="@+id/ivStatus"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginBottom="8dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="6dp"
-                app:tint="?attr/colorPrimary" />
+        <!-- Botón de favorito - Esquina inferior derecha (opcional, solo para libros terminados) -->
+        <ImageView
+            android:id="@+id/ivFavorite"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="8dp"
+            android:padding="8dp"
+            android:background="@drawable/button_circle_bg"
+            android:elevation="4dp"
+            android:visibility="gone"
+            app:tint="@color/favorite_color" />
 
-            <ImageView
-                android:id="@+id/ivFavorite"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="6dp"
-                android:visibility="gone"
-                app:tint="@color/favorite_color" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+    </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>

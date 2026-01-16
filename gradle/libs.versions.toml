@@ -33,7 +33,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 androidx-adapters = { group = "androidx.databinding", name = "adapters", version.ref = "adapters" }
 car-ui-lib = { group = "com.android.car.ui", name = "car-ui-lib", version.ref = "carUiLib" }
 
-# ✅ AGREGAR: Firebase
+#  AGREGAR: Firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }

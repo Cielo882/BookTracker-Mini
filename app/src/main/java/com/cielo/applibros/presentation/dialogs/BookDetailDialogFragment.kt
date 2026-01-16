@@ -152,7 +152,7 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
         btnSave = view.findViewById(R.id.btnSave)
         btnClose = view.findViewById(R.id.btnClose)
 
-        // ✅ NUEVO: Botón compartir (solo visible si está terminado)
+        //  NUEVO: Botón compartir (solo visible si está terminado)
         view.findViewById<Button>(R.id.btnShareBook)?.apply {
             if (book?.readingStatus == ReadingStatus.FINISHED) {
                 visibility = View.VISIBLE
@@ -280,21 +280,21 @@ class BookDetailDialogFragment : BottomSheetDialogFragment() {
             0 -> { // Por leer
                 ratingContainer.visibility = View.GONE
                 reviewContainer.visibility = View.GONE
-                favoriteContainer.visibility = View.GONE  // ✅ CAMBIAR
+                favoriteContainer.visibility = View.GONE  //  CAMBIAR
                 startDateContainer.visibility = View.GONE
                 finishDateContainer.visibility = View.GONE
             }
             1 -> { // Leyendo
                 ratingContainer.visibility = View.GONE
                 reviewContainer.visibility = View.GONE
-                favoriteContainer.visibility = View.GONE  // ✅ CAMBIAR
+                favoriteContainer.visibility = View.GONE  //  CAMBIAR
                 startDateContainer.visibility = View.VISIBLE
                 finishDateContainer.visibility = View.GONE
             }
             2 -> { // Terminado
                 ratingContainer.visibility = View.VISIBLE
                 reviewContainer.visibility = View.VISIBLE
-                favoriteContainer.visibility = View.VISIBLE  // ✅ CAMBIAR
+                favoriteContainer.visibility = View.VISIBLE  //  CAMBIAR
                 startDateContainer.visibility = View.VISIBLE
                 finishDateContainer.visibility = View.VISIBLE
             }

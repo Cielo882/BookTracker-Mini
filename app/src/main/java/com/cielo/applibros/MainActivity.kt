@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var settingsPreferences: SettingsPreferences // NUEVO
 
-    // ✅ AGREGAR: Firebase Helpers
+    //  AGREGAR: Firebase Helpers
     private lateinit var analyticsHelper: AnalyticsHelper
     private lateinit var crashlyticsHelper: CrashlyticsHelper
 
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         initializeFirebase()
 
-        // ✅ AGREGAR ESTO: Verificar si mostrar onboarding
+        //  AGREGAR ESTO: Verificar si mostrar onboarding
         if (OnboardingActivity.shouldShowOnboarding(this)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
@@ -162,7 +162,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val settingsPreferences = SettingsPreferences(applicationContext)
 
         // Crear repository con el servicio unificado
-        // ✅ INICIALIZAR EL REPOSITORY DE LA CLASE
+        //  INICIALIZAR EL REPOSITORY DE LA CLASE
             repository = BookRepositoryImpl(
                 unifiedSearchService,
                 bookDao,
@@ -206,11 +206,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             getFinishedBooksUseCase,
             updateStartDateUseCase,
             updateFinishDateUseCase,
-            getAllBooksUseCase,      // ✅ NUEVO
-            importBooksUseCase,      // ✅ NUEVO
+            getAllBooksUseCase,      //  NUEVO
+            importBooksUseCase,      //  NUEVO
             clearAllBooksUseCase,
-                    analyticsHelper,  // ✅ AGREGAR
-            crashlyticsHelper , // ✅ AGREGAR
+                    analyticsHelper,  //  AGREGAR
+            crashlyticsHelper , //  AGREGAR
 
         )
 
@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         settingsViewModel = SettingsViewModel(settingsPreferences)
         } catch (e: Exception) {
-            // ✅ AGREGAR: Log de error en Crashlytics
+            //  AGREGAR: Log de error en Crashlytics
             crashlyticsHelper.logException(e, "setupDependencies")
         }
     }
@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setupNavigationHeader() {
         val headerView = navigationView.getHeaderView(0)
 
-        // ✅ AGREGAR: Ajustar padding para el notch
+        //  AGREGAR: Ajustar padding para el notch
         headerView.setOnApplyWindowInsetsListener { view, insets ->
             val statusBarHeight = insets.systemWindowInsetTop
             view.setPadding(
@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         tvName.text = profile.name
 
-        // ✅ DEBUG: Ver qué se cargó
+        //  DEBUG: Ver qué se cargó
         Log.d("MainActivity", "Loading profile:")
         Log.d("MainActivity", "  Name: ${profile.name}")
         Log.d("MainActivity", "  Use Initial: ${profile.useInitial}")
@@ -284,7 +284,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 bitmap = Bitmap.createScaledBitmap(bitmap, targetSize, targetSize, true)
 
                 ivDrawing.setImageBitmap(bitmap)
-                cardDrawing.visibility = View.VISIBLE  // ✅ MOSTRAR CARD
+                cardDrawing.visibility = View.VISIBLE  //  MOSTRAR CARD
                 cardInitial.visibility = View.GONE
 
             } catch (e: Exception) {
@@ -320,12 +320,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         profile: UserProfile,
         tvInitial: TextView,
         cardInitial: MaterialCardView,
-        cardDrawing: MaterialCardView  // ✅ CAMBIAR parámetro
+        cardDrawing: MaterialCardView  //  CAMBIAR parámetro
     ) {
         val profileHelper = UserProfileHelper(this)
         tvInitial.text = profileHelper.getInitialFromName(profile.name)
         cardInitial.visibility = View.VISIBLE
-        cardDrawing.visibility = View.GONE  // ✅ OCULTAR CARD
+        cardDrawing.visibility = View.GONE  //  OCULTAR CARD
     }
 
     private fun showEditAvatarDialog() {
@@ -356,7 +356,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setText(currentProfile.name)
             hint = "Tu nombre"
             setSingleLine()
-            setPadding(50, 30, 50, 30)  // ✅ AGREGAR padding
+            setPadding(50, 30, 50, 30)  //  AGREGAR padding
         }
 
         AlertDialog.Builder(this)
@@ -456,7 +456,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, fragment)
                 .commit()
 
-            // ✅ AGREGAR: Log de navegación
+            //  AGREGAR: Log de navegación
             val fragmentName = fragment::class.simpleName ?: "Unknown"
             analyticsHelper.logFragmentOpened(fragmentName)
             crashlyticsHelper.logNavigationEvent(fragmentName)

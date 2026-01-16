@@ -16,9 +16,10 @@ import com.cielo.applibros.domain.model.ReadingStatus
 
 class BookAdapter(
     private val onBookClick: (Book) -> Unit,
-    private val onStatusClick: (Book) -> Unit, // Cambiado de onReadClick
     private val onRatingChanged: (Book, Float) -> Unit,
-    private val onFavoriteClick: ((Book) -> Unit)? = null
+    private val onFavoriteClick: ((Book) -> Unit)? = null,
+    private val onDeleteClick: ((Book) -> Unit)? = null // NUEVO
+
 ) : ListAdapter<Book, BookAdapter.BookViewHolder>(BookDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -38,6 +39,8 @@ class BookAdapter(
         private val coverImageView: ImageView = itemView.findViewById(R.id.ivCover)
         private val statusButton: ImageView = itemView.findViewById(R.id.ivStatus) // Cambió de ivRead
         private val favoriteButton: ImageView? = itemView.findViewById(R.id.ivFavorite) // Nuevo, opcional
+        private val deleteButton: ImageView = itemView.findViewById(R.id.ivDelete) // NUEVO
+
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
         private val ratingText: TextView = itemView.findViewById(R.id.tvRatingText)
         private val reviewText: TextView? = itemView.findViewById(R.id.tvReview) // Nuevo, opcional
@@ -82,13 +85,16 @@ class BookAdapter(
                     onFavoriteClick?.invoke(book)
                 }
             }
+            deleteButton.setOnClickListener {
+                onDeleteClick?.invoke(book)
+            }
 
             // Sistema de rating y reseña
             setupRatingAndReview(book)
 
             // Listeners
             itemView.setOnClickListener { onBookClick(book) }
-            statusButton.setOnClickListener { onStatusClick(book) }
+            //statusButton.setOnClickListener { onStatusClick(book) }
         }
 
         private fun setupRatingAndReview(book: Book) {

@@ -405,7 +405,7 @@ class SettingsFragment : Fragment() {
 
             Toast.makeText(
                 requireContext(),
-                "✅ Evento de Analytics enviado (revisa Firebase en unos minutos)",
+                " Evento de Analytics enviado (revisa Firebase en unos minutos)",
                 Toast.LENGTH_LONG
             ).show()
         }

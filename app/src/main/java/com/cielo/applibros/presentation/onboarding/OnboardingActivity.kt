@@ -65,7 +65,7 @@ class OnboardingActivity : AppCompatActivity() {
 
 
         btnNext.setOnClickListener {
-            // ✅ AGREGAR: Guardar avatar ANTES de continuar
+            //  AGREGAR: Guardar avatar ANTES de continuar
             if (viewPager.currentItem == 2) {
                 saveCurrentAvatar()  // Guardar el dibujo
             }
@@ -87,13 +87,13 @@ class OnboardingActivity : AppCompatActivity() {
                     0 -> {
                         btnNext.text = "Comenzar"
                         btnSkip.visibility = android.view.View.VISIBLE
-                        viewPager.isUserInputEnabled = true  // ✅ Permitir swipe
+                        viewPager.isUserInputEnabled = true  //  Permitir swipe
 
                     }
                     1 -> {
                         btnNext.text = "Siguiente"
                         btnSkip.visibility = android.view.View.VISIBLE
-                        viewPager.isUserInputEnabled = true  // ✅ Permitir swipe
+                        viewPager.isUserInputEnabled = true  //  Permitir swipe
                     }
                     2 -> {
                         btnNext.text = "¡Empezar a leer!"
@@ -126,7 +126,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         val finalName =     userName.ifEmpty { "Lector Apasionado" }
 
-        // ✅ DEBUG: Ver qué se guarda
+        //  DEBUG: Ver qué se guarda
         Log.d("Onboarding", "Saving profile:")
         Log.d("Onboarding", "  Name: $finalName")
         Log.d("Onboarding", "  Use Initial: $useInitial")
@@ -138,7 +138,7 @@ class OnboardingActivity : AppCompatActivity() {
             useInitial = useInitial
         )
 
-        // ✅ DEBUG: Verificar que se guardó
+        //  DEBUG: Verificar que se guardó
         val saved = profileHelper.getProfile()
         Log.d("Onboarding", "Profile saved:")
         Log.d("Onboarding", "  Name: ${saved.name}")
