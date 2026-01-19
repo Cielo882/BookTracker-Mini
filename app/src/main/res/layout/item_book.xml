@@ -9,35 +9,50 @@
     app:cardElevation="4dp"
     app:cardBackgroundColor="?attr/colorSurface">
 
-    <!-- FrameLayout para posicionar botones flotantes sobre la card -->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Contenido principal -->
+        <!-- BOTÓN ELIMINAR – ESQUINA SUPERIOR DERECHA -->
+        <ImageView
+            android:id="@+id/ivDelete"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="8dp"
+            android:padding="6dp"
+            android:src="@drawable/ic_delete"
+            android:background="@drawable/button_circle_bg_red"
+            android:elevation="6dp"
+            app:tint="@android:color/white" />
+
+        <!-- CONTENIDO PRINCIPAL -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="12dp">
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="12dp"
+            android:paddingTop="32dp">
 
-            <!-- Imagen de portada -->
+            <!-- PORTADA -->
             <ImageView
                 android:id="@+id/ivCover"
                 android:layout_width="80dp"
                 android:layout_height="120dp"
+                android:layout_marginEnd="12dp"
                 android:scaleType="centerCrop"
-                android:background="@drawable/book_placeholder_bg"
-                android:layout_marginEnd="12dp" />
+                android:background="@drawable/book_placeholder_bg"/>
 
-            <!-- Contenido del libro -->
+            <!-- CONTENIDO TEXTO -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <!-- Título -->
+                <!-- TÍTULO -->
                 <TextView
                     android:id="@+id/tvTitle"
                     android:layout_width="match_parent"
@@ -47,19 +62,18 @@
                     android:textColor="?attr/colorOnSurface"
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="4dp"/>
 
-                <!-- Autor -->
+                <!-- AUTOR -->
                 <TextView
                     android:id="@+id/tvAuthor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:layout_marginBottom="4dp" />
+                    android:layout_marginBottom="4dp"/>
 
-                <!-- Estado -->
+                <!-- ESTADO -->
                 <TextView
                     android:id="@+id/tvStatus"
                     android:layout_width="wrap_content"
@@ -69,9 +83,9 @@
                     android:background="@drawable/status_badge_bg"
                     android:paddingHorizontal="8dp"
                     android:paddingVertical="4dp"
-                    android:layout_marginBottom="8dp" />
+                    android:layout_marginBottom="8dp"/>
 
-                <!-- Rating (solo para libros terminados) -->
+                <!-- RATING -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -87,7 +101,7 @@
                         android:numStars="5"
                         android:stepSize="1"
                         android:progressTint="@color/rating_gold"
-                        android:visibility="gone" />
+                        android:visibility="gone"/>
 
                     <TextView
                         android:id="@+id/tvRatingText"
@@ -96,11 +110,10 @@
                         android:textSize="12sp"
                         android:textColor="?attr/colorOnSurfaceVariant"
                         android:layout_marginStart="8dp"
-                        android:visibility="gone" />
-
+                        android:visibility="gone"/>
                 </LinearLayout>
 
-                <!-- Reseña (opcional) -->
+                <!-- RESEÑA -->
                 <TextView
                     android:id="@+id/tvReview"
                     android:layout_width="match_parent"
@@ -109,13 +122,11 @@
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:maxLines="2"
                     android:ellipsize="end"
-                    android:visibility="gone" />
-
+                    android:visibility="gone"/>
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- Botón de cambiar estado - Esquina superior izquierda -->
+        <!-- BOTÓN CAMBIAR ESTADO -->
         <ImageView
             android:id="@+id/ivStatus"
             android:layout_width="36dp"
@@ -123,23 +134,9 @@
             android:layout_margin="8dp"
             android:padding="8dp"
             android:elevation="4dp"
+            app:tint="?attr/colorOnSurface"/>
 
-            app:tint="?attr/colorOnSurface" />
-
-        <!-- Botón de eliminar - Esquina superior derecha -->
-        <ImageView
-            android:id="@+id/ivDelete"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:layout_gravity="end|top"
-            android:layout_margin="8dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_delete"
-            android:background="@drawable/button_circle_bg_red"
-            android:elevation="4dp"
-            app:tint="@android:color/white" />
-
-        <!-- Botón de favorito - Esquina inferior derecha (opcional, solo para libros terminados) -->
+        <!-- FAVORITO -->
         <ImageView
             android:id="@+id/ivFavorite"
             android:layout_width="36dp"
@@ -150,7 +147,7 @@
             android:background="@drawable/button_circle_bg"
             android:elevation="4dp"
             android:visibility="gone"
-            app:tint="@color/favorite_color" />
+            app:tint="@color/favorite_color"/>
 
     </FrameLayout>
 

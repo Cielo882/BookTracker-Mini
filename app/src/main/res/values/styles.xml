@@ -205,6 +205,16 @@
         <item name="android:background">?attr/colorOutline</item>
     </style>
 
+    <style
+        name="TextAppearance.BookTracker.Navigation"
+        parent="TextAppearance.Material3.BodyLarge">
+
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:fontWeight">500</item>
+
+    </style>
+
+
 
 
 </resources>

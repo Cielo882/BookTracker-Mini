@@ -9,13 +9,16 @@
     android:padding="32dp"
     android:background="?attr/colorPrimary">
 
+
+
     <!-- Emoji -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="👋"
-        android:textSize="80sp"
-        android:layout_marginBottom="32dp" />
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:src="@drawable/icons_manosaludo"
+        android:layout_marginBottom="32dp"/>
+
+
 
     <!-- Título -->
     <TextView
@@ -23,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="¿Cómo te llamas?"
         android:textSize="28sp"
-        android:textStyle="bold"
+        style="@style/TextAppearance.BookTracker.Headline"
         android:textColor="?attr/colorOnSurface"
         android:layout_marginBottom="8dp" />
 

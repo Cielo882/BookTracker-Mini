@@ -81,6 +81,8 @@
         android:id="@+id/tvReaderTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/TextAppearance.BookTracker.Headline"
+
         android:text="Lector apasionado 🔥"
         android:textSize="14sp"
         android:textColor="?attr/colorOnPrimary"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style
+        name="TextAppearance.BookTracker.Headline"
+        parent="TextAppearance.Material3.HeadlineMedium">
+
+        <item name="fontFamily">@font/inter</item>
+        <item name="android:fontWeight">600</item>
+
+    </style>
+
+</resources>

@@ -78,7 +78,8 @@
             android:text="Busca tu próximo libro"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            style="@style/TextAppearance.BookTracker.Headline"
+            />
 
         <TextView
             android:layout_width="wrap_content"

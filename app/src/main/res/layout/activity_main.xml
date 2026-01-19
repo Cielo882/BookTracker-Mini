@@ -30,6 +30,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:fitsSystemWindows="true"
                 android:background="?attr/colorPrimary"
+                style="@style/TextAppearance.BookTracker.Headline"
+
                 app:title="BookTracker Mini"
                 app:titleTextColor="?attr/colorOnPrimary"
                 app:navigationIcon="@drawable/ic_menu" />
@@ -52,6 +54,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            app:itemTextAppearance="@style/TextAppearance.BookTracker.Navigation"
+
 
             app:menu="@menu/bottom_navigation_redesigned"
             android:elevation="8dp" />
@@ -69,6 +73,8 @@
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/drawer_menu"
         app:itemIconTint="?attr/colorPrimary"
+        app:itemTextAppearance="@style/TextAppearance.BookTracker.Navigation"
+
         app:itemTextColor="?attr/colorOnSurface" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

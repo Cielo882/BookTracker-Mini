@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:text="Crea tu avatar"
             android:textSize="28sp"
-            android:textStyle="bold"
+            style="@style/TextAppearance.BookTracker.Headline"
             android:textColor="?attr/colorOnSurface"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp" />
@@ -29,7 +29,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Dibuja una carita con tu dedo ✨"
+            android:text="Dibuja una carita con tu dedo :)"
             android:textSize="14sp"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_marginBottom="24dp" />
@@ -51,15 +51,27 @@
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Paleta de colores -->
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="🎨 Elige un color"
-            android:textSize="14sp"
-            android:textColor="?attr/colorOnSurface"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="12dp">
 
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icons_palette"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Elige un color"
+                android:textSize="14sp"
+                android:textColor="?attr/colorOnSurface"
+                android:textStyle="bold"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

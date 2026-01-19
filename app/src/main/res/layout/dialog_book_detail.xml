@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:text="Estado de lectura"
             android:textSize="@dimen/text_label"
-            android:textStyle="bold"
+            style="@style/TextAppearance.BookTracker.Headline"
             android:textColor="?attr/colorOnSurface"
             android:layout_marginBottom="@dimen/spacing_small" />
 
