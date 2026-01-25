@@ -103,6 +103,7 @@ class SettingsFragment : Fragment() {
 
     }
 
+
     private fun setupButtons(view: View) {
         view.findViewById<Button>(R.id.btnExportData).setOnClickListener {
             exportData()

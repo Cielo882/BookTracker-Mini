@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/colorSurface">
+    android:background="?attr/backgroundColor">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,15 +13,42 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+
         <!-- Header -->
-        <TextView
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="⚙️ Configuración"-->
+<!--            android:textSize="24sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="?attr/colorOnSurface"-->
+<!--            -->
+<!--            android:layout_marginBottom="24dp" />-->
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⚙️ Configuración"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginBottom="24dp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/icons_ajustes"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Configuración"
+                android:textSize="24sp"
+                android:textColor="?attr/colorOnSurface"
+                style="@style/TextAppearance.BookTracker.Headline"
+
+                android:textStyle="bold"/>
+        </LinearLayout>
+
 
         <!-- Idioma -->
         <com.google.android.material.card.MaterialCardView
@@ -65,6 +93,8 @@
                         android:text="Idioma de búsqueda"
                         android:textSize="18sp"
                         android:textColor="?attr/colorOnSurface"
+                        style="@style/TextAppearance.BookTracker.Headline"
+
                         android:textStyle="bold"/>
                 </LinearLayout>
 
@@ -137,6 +167,8 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_palette"
+                        android:tint="?attr/colorOnSurface"
+
                         android:layout_marginEnd="8dp"/>
 
                     <TextView
@@ -145,6 +177,8 @@
                         android:text="Elige un color"
                         android:textSize="18sp"
                         android:textColor="?attr/colorOnSurface"
+                        style="@style/TextAppearance.BookTracker.Headline"
+
                         android:textStyle="bold"/>
                 </LinearLayout>
 
@@ -211,15 +245,40 @@
 
 
         <!-- Sección de Datos -->
-        <TextView
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="💾 Respaldo de Datos"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="?attr/colorOnSurface"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:layout_marginBottom="12dp" />-->
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="💾 Respaldo de Datos"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/icons_doc"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Respaldo de Datos"
+                android:textSize="18sp"
+                android:textColor="?attr/colorOnSurface"
+                style="@style/TextAppearance.BookTracker.Headline"
+
+                android:textStyle="bold"/>
+        </LinearLayout>
+
 
         <com.google.android.material.card.MaterialCardView
             style="@style/Card.Elevated"
@@ -329,15 +388,39 @@
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Información legal -->
-        <TextView
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="📄 Información legal"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textColor="?attr/colorOnSurface"-->
+<!--            android:layout_marginTop="24dp"-->
+<!--            android:layout_marginBottom="12dp" />-->
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📄 Información legal"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="?attr/colorOnSurface"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="12dp" />
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="12dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/icons_terms"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Información legal"
+                android:textSize="18sp"
+                android:textColor="?attr/colorOnSurface"
+                style="@style/TextAppearance.BookTracker.Headline"
+
+                android:textStyle="bold"/>
+        </LinearLayout>
+
 
         <com.google.android.material.card.MaterialCardView
             style="@style/Card.Elevated"
