@@ -13,7 +13,7 @@ import com.cielo.applibros.R
 @SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
 
-    private val SPLASH_DURATION = 5500L // segundos
+    private val SPLASH_DURATION = 3300L // segundos
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

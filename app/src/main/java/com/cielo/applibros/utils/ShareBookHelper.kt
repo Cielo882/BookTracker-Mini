@@ -17,6 +17,7 @@ import java.util.*
 import android.graphics.BitmapFactory
 import kotlin.math.cos
 import kotlin.math.sin
+import androidx.core.graphics.scale
 
 
 class ShareBookHelper(private val context: Context) {
@@ -302,16 +303,95 @@ class ShareBookHelper(private val context: Context) {
     }
 
     private fun drawAppLogo(canvas: Canvas, width: Int, height: Int) {
-        val logoPaint = Paint().apply {
-            color = Color.parseColor("#D4A59A")
-            textSize = 32f
+        val baseY = height - 140f
+
+        try {
+            val logoBitmap = BitmapFactory.decodeResource(
+                context.resources,
+                R.drawable.playstore_logo
+            )
+
+            val logoSize = 80
+            val scaledLogo = Bitmap.createScaledBitmap(logoBitmap, logoSize, logoSize, true)
+
+            val centerX = width / 2f
+            val centerY = baseY - 10f
+            val logoX = centerX - logoSize / 2f
+            val logoY = centerY - logoSize / 2f
+
+            // Obtener colores del tema actual
+            val typedValue = android.util.TypedValue()
+            val theme = context.theme
+
+            // Color de fondo (colorSurface)
+            theme.resolveAttribute(
+                com.google.android.material.R.attr.colorSurface,
+                typedValue,
+                true
+            )
+            val surfaceColor = typedValue.data
+
+            // Color del borde (colorPrimary)
+            theme.resolveAttribute(
+                com.google.android.material.R.attr.colorPrimary,
+                typedValue,
+                true
+            )
+            val primaryColor = typedValue.data
+
+            // Fondo circular con color del tema
+            val bgPaint = Paint().apply {
+                color = surfaceColor
+                isAntiAlias = true
+                style = Paint.Style.FILL
+            }
+
+            canvas.drawCircle(centerX, centerY, (logoSize / 2f) + 12f, bgPaint)
+
+            // Borde circular con color primario
+            val borderPaint = Paint().apply {
+                color = primaryColor
+                alpha = 100
+                isAntiAlias = true
+                style = Paint.Style.STROKE
+                strokeWidth = 3f
+            }
+
+            canvas.drawCircle(centerX, centerY, (logoSize / 2f) + 12f, borderPaint)
+
+            // Dibujar logo con clip circular
+            val path = Path().apply {
+                addCircle(centerX, centerY, logoSize / 2f, Path.Direction.CW)
+            }
+
+            canvas.save()
+            canvas.clipPath(path)
+            canvas.drawBitmap(scaledLogo, logoX, logoY, null)
+            canvas.restore()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Color del texto (colorOnSurfaceVariant)
+        val typedValue = android.util.TypedValue()
+        context.theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnSurfaceVariant,
+            typedValue,
+            true
+        )
+        val textColor = typedValue.data
+
+        // Texto con color del tema
+        val textPaint = Paint().apply {
+            color = textColor
+            textSize = 28f
             textAlign = Paint.Align.CENTER
             typeface = Typeface.DEFAULT_BOLD
-            alpha = 180
             isAntiAlias = true
         }
 
-        canvas.drawText("📚 BookTracker", width / 2f, height - 100f, logoPaint)
+        canvas.drawText("BookTracker Mini", width / 2f, baseY + 90f, textPaint)
     }
 
     private fun drawMultilineText(

@@ -4,6 +4,13 @@
     <!-- ============================================ -->
     <style name="Theme.AppLibros" parent="Theme.Material3.Dark.NoActionBar">
 
+        <!-- NUEVOS ATRIBUTOS PARA CONFIGURACIÓN -->
+        <item name="colorSurfaceContainerHigh">@color/gris_marron</item>
+        <item name="colorSurfaceContainer">@color/marron_suave</item>
+
+        <!-- Para el fondo de la pantalla de configuración -->
+        <item name="android:windowBackground">@color/marron_oscuro</item>
+
         <!-- Colores primarios -->
         <item name="colorPrimary">@color/terracota_profunda</item>
         <item name="colorOnPrimary">@color/texto_oscuro_primario</item>

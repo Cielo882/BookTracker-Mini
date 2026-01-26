@@ -108,4 +108,15 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+
+
+    <!-- Colores para ribbons según estado -->
+    <color name="ribbon_reading">#4CAF50</color> <!-- Verde para Leyendo -->
+    <color name="ribbon_reading_dark">#388E3C</color>
+
+    <color name="ribbon_to_read">#2196F3</color> <!-- Azul para Por Leer -->
+    <color name="ribbon_to_read_dark">#1976D2</color>
+
+    <color name="ribbon_finished">#FF9800</color> <!-- Naranja para Terminado -->
+    <color name="ribbon_finished_dark">#F57C00</color>
 </resources>

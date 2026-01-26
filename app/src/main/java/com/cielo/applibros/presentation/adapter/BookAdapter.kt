@@ -46,8 +46,34 @@ class BookAdapter(
         private val reviewText: TextView? = itemView.findViewById(R.id.tvReview) // Nuevo, opcional
 
         fun bind(book: Book) {
+            val ribbonText: String
+            val ribbonColor: Int
+            val ribbonDarkColor: Int
             titleTextView.text = book.title
             authorTextView.text = book.authorsString
+
+            when (book.readingStatus) {
+                ReadingStatus.TO_READ -> {
+                    ribbonText = "Por leer"
+                    ribbonColor = R.color.ribbon_to_read
+                    ribbonDarkColor = R.color.ribbon_to_read_dark
+                }
+                ReadingStatus.READING -> {
+                    ribbonText = "Leyendo"
+                    ribbonColor = R.color.ribbon_reading
+                    ribbonDarkColor = R.color.ribbon_reading_dark
+                }
+                ReadingStatus.FINISHED -> {
+                    ribbonText = "Terminado"
+                    ribbonColor = R.color.ribbon_finished
+                    ribbonDarkColor = R.color.ribbon_finished_dark
+                }
+            }
+
+            // Actualizar ribbon
+            val tvStatusRibbon: TextView = itemView.findViewById(R.id.tvStatusRibbon)
+            tvStatusRibbon.text = ribbonText
+            tvStatusRibbon.setBackgroundColor(itemView.context.getColor(ribbonColor))
 
             // Mostrar estado del libro
             statusTextView.text = when (book.readingStatus) {

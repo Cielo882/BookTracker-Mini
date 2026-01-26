@@ -5,6 +5,14 @@
     <!-- ============================================ -->
     <style name="Theme.AppLibros" parent="Theme.Material3.Light.NoActionBar">
 
+
+        <!-- NUEVOS ATRIBUTOS PARA CONFIGURACIÓN -->
+        <item name="colorSurfaceContainerHigh">@color/crema_blanca</item>
+        <item name="colorSurfaceContainer">@color/arena_pastel</item>
+
+        <!-- Para el fondo de la pantalla de configuración -->
+        <item name="android:windowBackground">@color/crema_calida</item>
+
         <!-- Colores primarios -->
         <item name="colorPrimary">@color/terracota</item>
         <item name="colorOnPrimary">@color/white</item>
