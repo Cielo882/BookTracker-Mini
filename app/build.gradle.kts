@@ -120,7 +120,7 @@ dependencies {
     // Lottie para animaciones
     implementation("com.airbnb.android:lottie:6.1.0")
 
-    //  AGREGAR: Firebase (usando BoM)
+    //  Firebase (usando BoM)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
