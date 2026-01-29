@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,6 +34,9 @@ class SearchFragment : Fragment() {
     private var existingBookIds: Set<Int> = emptySet()
 
     private var networkDialogShown = false
+
+    private var lastSearchTime = 0L
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -170,12 +174,18 @@ class SearchFragment : Fragment() {
     }
 
     private fun performSearch() {
+        val currentTime = System.currentTimeMillis()
+        val timeSinceLastSearch = currentTime - lastSearchTime
+
+        if (timeSinceLastSearch < 2000) { // 2 segundos
+            Toast.makeText(requireContext(), "Espera un momento...", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lastSearchTime = currentTime
         val query = etSearch.text.toString().trim()
         if (query.isNotBlank()) {
             viewModel.searchBooks(query)
-        } else {
-            // ✅ Usando string resource
-            etSearch.error = getString(R.string.search_error_empty)
         }
     }
 
