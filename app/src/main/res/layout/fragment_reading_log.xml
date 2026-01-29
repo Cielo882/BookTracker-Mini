@@ -47,7 +47,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Registro General de Lectura"
+                    android:text="@string/registro_general"
                     android:textSize="20sp"
                     android:textColor="?attr/colorOnSurface"
 
@@ -65,7 +65,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Historial detallado de todos tus libros terminados"
+                android:text="@string/historial_de_todos_tus_libros_terminados"
                 android:textSize="12sp"
                 android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_marginTop="4dp" />
@@ -90,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:text="📚\n\nAún no has terminado ningún libro\ncon fechas registradas"
+        android:text="@string/n_na_n_no_has_terminado_ning_n_libro_ncon_fechas_registradas"
         android:textSize="16sp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textAlignment="center"

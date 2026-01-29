@@ -124,7 +124,7 @@ class OnboardingActivity : AppCompatActivity() {
     fun finishOnboarding() {
         val profileHelper = UserProfileHelper(this)
 
-        val finalName =     userName.ifEmpty { "Lector Apasionado" }
+        val finalName =     userName.ifEmpty { getString(R.string.lector_apasionado) }
 
         //  DEBUG: Ver qué se guarda
         Log.d("Onboarding", "Saving profile:")

@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Estado de lectura"
+            android:text="@string/estado_de_lectura"
             android:textSize="@dimen/text_label"
             style="@style/TextAppearance.BookTracker.Headline"
             android:textColor="?attr/colorOnSurface"
@@ -101,7 +101,7 @@
                 android:id="@+id/tvStartDateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fecha de inicio"
+                android:text="@string/fecha_de_inicio"
                 android:textSize="@dimen/text_label"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
@@ -127,7 +127,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sin fecha"
+                    android:text="@string/sin_fecha"
                     android:textSize="@dimen/text_body"
                     android:textColor="?attr/colorOnSurface" />
 
@@ -138,7 +138,7 @@
                     android:src="@drawable/ic_edit"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:tint="?attr/colorPrimary"
-                    android:contentDescription="Editar fecha" />
+                    android:contentDescription="@string/editar_fecha" />
 
             </LinearLayout>
 
@@ -157,7 +157,7 @@
                 android:id="@+id/tvFinishDateLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Fecha de término"
+                android:text="@string/fecha_de_t_rmino"
                 android:textSize="@dimen/text_label"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
@@ -183,7 +183,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Sin fecha"
+                    android:text="@string/sin_fecha"
                     android:textSize="@dimen/text_body"
                     android:textColor="?attr/colorOnSurface" />
 
@@ -194,7 +194,7 @@
                     android:src="@drawable/ic_edit"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     app:tint="?attr/colorPrimary"
-                    android:contentDescription="Editar fecha" />
+                    android:contentDescription="@string/editar_fecha" />
 
             </LinearLayout>
 
@@ -211,7 +211,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calificación"
+                android:text="@string/rating"
                 android:textSize="@dimen/text_label"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
@@ -243,7 +243,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mi reseña"
+                android:text="@string/my_review"
                 android:textSize="@dimen/text_label"
                 android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
@@ -254,7 +254,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/spacing_medium"
-                android:hint="Escribe tu reseña..."
+                android:hint="@string/write_review_hint"
                 app:boxBackgroundMode="outline"
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
@@ -302,7 +302,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Marcar como favorito"
+                android:text="@string/mark_as_favorite"
                 android:textSize="@dimen/text_body"
                 android:textColor="?attr/colorOnSurface" />
 
@@ -320,7 +320,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/button_height"
                 android:minWidth="@dimen/button_min_width"
-                android:text="Cerrar"
+                android:text="@string/close"
                 android:textSize="@dimen/text_button"
                 android:textColor="?attr/colorPrimary"
                 style="@style/Button.Secondary"
@@ -332,7 +332,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/button_height"
                 android:minWidth="@dimen/button_min_width"
-                android:text="Guardar"
+                android:text="@string/save"
                 android:textSize="@dimen/text_button"
                 style="@style/Button.Primary"/>
 
@@ -343,7 +343,7 @@
             style="@style/Widget.Material3.Button.Icon"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/button_height"
-            android:text="Compartir"
+            android:text="@string/compartir"
             android:visibility="gone"
             app:icon="@drawable/ic_share"
             app:backgroundTint="?attr/colorSecondary"

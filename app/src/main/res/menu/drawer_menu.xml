@@ -10,23 +10,23 @@
         <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_person"
-            android:title="Mi Perfil" />
+            android:title="@string/nav_profile" />
 
         <item
             android:id="@+id/nav_statistics"
             android:icon="@drawable/ic_bar_chart"
-            android:title="Estadísticas" />
+            android:title="@string/nav_statistics" />
 
         <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_favorite_filled"
 
-            android:title="Favoritos" />
+            android:title="@string/nav_favorites" />
 
         <item
             android:id="@+id/nav_reading_log"
             android:icon="@drawable/ic_book"
-            android:title="Registro General" />
+            android:title="@string/registro_general" />
     </group>
 
     <!-- Divider -->
@@ -35,12 +35,12 @@
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings"
-                android:title="Ajustes" />
+                android:title="@string/nav_settings" />
 
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_info"
-                android:title="Acerca de" />
+                android:title="@string/nav_about" />
         </menu>
     </item>
 

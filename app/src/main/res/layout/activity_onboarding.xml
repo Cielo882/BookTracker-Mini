@@ -47,7 +47,7 @@
             style="@style/Button.Primary2"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:text="Comenzar"
+            android:text="@string/comenzar"
             android:textSize="16sp" />
 
         <!-- Botón de saltar -->
@@ -59,7 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="Saltar"
+            android:text="@string/saltar"
             android:textSize="14sp"
             android:textColor="?attr/colorSurface"
             android:padding="8dp" />

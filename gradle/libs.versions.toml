@@ -18,6 +18,7 @@ firebaseBom = "32.7.0"
 googleServices = "4.4.0"
 firebaseCrashlytics = "2.9.9"
 firebaseCrashlyticsBuildtools = "3.0.6"
+uiText = "1.10.1"
 
 
 [libraries]
@@ -39,6 +40,7 @@ firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics
 firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx" }
 firebase-perf = { group = "com.google.firebase", name = "firebase-perf-ktx" }
 firebase-crashlytics-buildtools = { group = "com.google.firebase", name = "firebase-crashlytics-buildtools", version.ref = "firebaseCrashlyticsBuildtools" }
+androidx-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 
 
 

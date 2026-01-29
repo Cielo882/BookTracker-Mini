@@ -3,6 +3,7 @@ package com.cielo.applibros.presentation.fragments
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -310,7 +311,7 @@ class SettingsFragment : Fragment() {
         val languageChanged = tempLanguage != currentSettings.language
         val themeChanged = tempTheme != currentSettings.themeMode
 
-        // --- CAMBIO SUGERIDO: Aplicar el tema PRIMERO si ha cambiado ---
+        // ---  Aplicar el tema PRIMERO si ha cambiado ---
         tempTheme?.let {
             if (themeChanged) {
                 // 1. Guardar y aplicar el TEMA. Esto no reinicia la actividad.
@@ -326,6 +327,7 @@ class SettingsFragment : Fragment() {
                 // 2. Guardar el IDIOMA. Esto probablemente reinicie la actividad,
                 // pero el tema ya está guardado y aplicado en la configuración.
                 viewModel.updateLanguage(it)
+                applyLanguage(it)
             }
         }
         // ---------------------------------------------------
@@ -334,8 +336,33 @@ class SettingsFragment : Fragment() {
         // Mostrar mensaje (Asegúrate de que este diálogo se pueda mostrar
         // ANTES del reinicio, o considera mostrarlo en la nueva actividad)
         if (languageChanged || themeChanged) {
-             //showChangesAppliedDialog(languageChanged, themeChanged)
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.toast_settings_saved), // Usar string resource
+                Toast.LENGTH_SHORT
+            ).show()
         }
+    }
+
+    private fun applyLanguage(language: Language) {
+        val locale = when (language) {
+            Language.SPANISH -> Locale("es")
+            Language.ENGLISH -> Locale("en")
+        }
+
+        Locale.setDefault(locale)
+
+        val config = resources.configuration
+        config.setLocale(locale)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            requireContext().createConfigurationContext(config)
+        }
+
+        resources.updateConfiguration(config, resources.displayMetrics)
+
+        // Reiniciar la actividad para aplicar cambios
+        activity?.recreate()
     }
 
     private fun applyTheme(theme: ThemeMode) {

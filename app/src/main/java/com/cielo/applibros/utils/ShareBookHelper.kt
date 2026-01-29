@@ -24,30 +24,19 @@ class ShareBookHelper(private val context: Context) {
 
     suspend fun createShareImage(book: Book): Uri? = withContext(Dispatchers.IO) {
         try {
-            // Dimensiones (Instagram story optimized)
             val width = 1080
             val height = 1920
 
-            // Crear bitmap
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
 
-            // Fondo con gradiente
             drawBackground(canvas, width, height)
-
-            // Portada del libro
             drawBookCover(canvas, book.imageUrl, width)
-
-            // Información del libro
             drawBookInfo(canvas, book, width, height)
-
-            // Logo de la app
             drawAppLogo(canvas, width, height)
 
-            // Guardar imagen
             val file = saveImageToCache(bitmap)
 
-            // Crear URI con FileProvider
             FileProvider.getUriForFile(
                 context,
                 "${context.packageName}.fileprovider",
@@ -58,15 +47,14 @@ class ShareBookHelper(private val context: Context) {
             null
         }
     }
+
     private fun drawBackground(canvas: Canvas, width: Int, height: Int) {
         try {
-            //  Cargar imagen de fondo desde recursos
             val backgroundBitmap = BitmapFactory.decodeResource(
                 context.resources,
-                R.drawable.profile_pattern // o el nombre de tu drawable
+                R.drawable.profile_pattern
             )
 
-            // Escalar imagen para que cubra todo el canvas
             val scaledBackground = Bitmap.createScaledBitmap(
                 backgroundBitmap,
                 width,
@@ -74,25 +62,22 @@ class ShareBookHelper(private val context: Context) {
                 true
             )
 
-            // Dibujar imagen de fondo
             canvas.drawBitmap(scaledBackground, 0f, 0f, null)
 
-            // Overlay semi-transparente para mejorar contraste
             val nightMode = context.resources.configuration.uiMode and
                     android.content.res.Configuration.UI_MODE_NIGHT_MASK
 
             val overlayPaint = Paint().apply {
                 if (nightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES) {
-                    color = Color.parseColor("#CC000000") // Negro 80%
+                    color = Color.parseColor("#CC000000")
                 } else {
-                    color = Color.parseColor("#B3FFFDF5") // Blanco crema 70%
+                    color = Color.parseColor("#B3FFFDF5")
                 }
             }
 
             canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), overlayPaint)
 
         } catch (e: Exception) {
-            // Fallback: gradiente si falla cargar imagen
             drawGradientBackground(canvas, width, height)
         }
     }
@@ -127,10 +112,8 @@ class ShareBookHelper(private val context: Context) {
         canvas.drawRect(0f, 0f, width.toFloat(), height.toFloat(), paint)
     }
 
-
     private suspend fun drawBookCover(canvas: Canvas, coverUrl: String?, width: Int) {
         try {
-            // Descargar y redimensionar portada
             val coverBitmap = withContext(Dispatchers.IO) {
                 Glide.with(context)
                     .asBitmap()
@@ -139,7 +122,6 @@ class ShareBookHelper(private val context: Context) {
                     .get()
             }
 
-            // Crear sombra para la portada
             val shadowPaint = Paint().apply {
                 color = Color.BLACK
                 alpha = 50
@@ -149,7 +131,6 @@ class ShareBookHelper(private val context: Context) {
             val coverX = (width - coverBitmap.width) / 2f
             val coverY = 200f
 
-            // Dibujar sombra
             canvas.drawRoundRect(
                 coverX - 10f,
                 coverY + 10f,
@@ -159,7 +140,6 @@ class ShareBookHelper(private val context: Context) {
                 shadowPaint
             )
 
-            // Dibujar portada con bordes redondeados
             val path = Path().apply {
                 addRoundRect(
                     coverX, coverY,
@@ -176,7 +156,6 @@ class ShareBookHelper(private val context: Context) {
             canvas.restore()
 
         } catch (e: Exception) {
-            // Si falla, dibujar placeholder
             drawPlaceholder(canvas, width)
         }
     }
@@ -196,7 +175,6 @@ class ShareBookHelper(private val context: Context) {
 
         canvas.drawRoundRect(placeholderRect, 20f, 20f, placeholderPaint)
 
-        // Icono de libro
         val textPaint = Paint().apply {
             color = Color.WHITE
             textSize = 120f
@@ -215,7 +193,6 @@ class ShareBookHelper(private val context: Context) {
 
         var yPosition = 900f
 
-        // Título
         val titlePaint = Paint().apply {
             color = textColor
             textSize = 56f
@@ -236,7 +213,6 @@ class ShareBookHelper(private val context: Context) {
 
         yPosition += 140f
 
-        // Autor
         val authorPaint = Paint().apply {
             color = textColor
             alpha = 200
@@ -248,7 +224,6 @@ class ShareBookHelper(private val context: Context) {
         canvas.drawText(book.authorsString, width / 2f, yPosition, authorPaint)
         yPosition += 100f
 
-        // Línea separadora
         val linePaint = Paint().apply {
             color = accentColor
             strokeWidth = 4f
@@ -265,15 +240,13 @@ class ShareBookHelper(private val context: Context) {
 
         yPosition += 80f
 
-        // Rating (estrellas)
         drawRating(canvas, book.rating ?: 0, width / 2f, yPosition)
         yPosition += 100f
 
-        // Estadísticas
         drawStats(canvas, book, width / 2f, yPosition, textColor)
     }
 
-
+    // ✅ MÉTODO CORREGIDO CON STRING RESOURCES
     private fun drawStats(canvas: Canvas, book: Book, centerX: Float, y: Float, textColor: Int) {
         val statPaint = Paint().apply {
             color = textColor
@@ -284,21 +257,37 @@ class ShareBookHelper(private val context: Context) {
 
         var currentY = y
 
-        // Días de lectura
+        // ✅ Días de lectura con string resources
         book.startDate?.let { start ->
             book.finishDate?.let { finish ->
                 val days = ((finish - start) / (1000 * 60 * 60 * 24)).toInt()
-                val daysText = if (days <= 1) "1 día" else "$days días"
-                canvas.drawText("📖 Leído en $daysText", centerX, currentY, statPaint)
+
+                // ✅ Usar string resource según si es 1 día o más
+                val daysText = if (days <= 1) {
+                    context.getString(R.string.stats_read_in_one_day)
+                } else {
+                    context.getString(R.string.stats_read_in_days, days)
+                }
+
+                canvas.drawText(daysText, centerX, currentY, statPaint)
                 currentY += 60f
             }
         }
 
-        // Fecha de término
+        // ✅ Fecha de término con string resource
         book.finishDate?.let { finish ->
-            val dateFormat = SimpleDateFormat("d MMM yyyy", Locale("es"))
+            // ✅ IMPORTANTE: El formato de fecha también debe adaptarse al idioma
+            val locale = if (context.resources.configuration.locales[0].language == "en") {
+                Locale.ENGLISH
+            } else {
+                Locale("es")
+            }
+
+            val dateFormat = SimpleDateFormat("d MMM yyyy", locale)
             val dateText = dateFormat.format(Date(finish))
-            canvas.drawText("📅 Terminado: $dateText", centerX, currentY, statPaint)
+
+            val finishedText = context.getString(R.string.stats_finished_on, dateText)
+            canvas.drawText(finishedText, centerX, currentY, statPaint)
         }
     }
 
@@ -319,11 +308,9 @@ class ShareBookHelper(private val context: Context) {
             val logoX = centerX - logoSize / 2f
             val logoY = centerY - logoSize / 2f
 
-            // Obtener colores del tema actual
             val typedValue = android.util.TypedValue()
             val theme = context.theme
 
-            // Color de fondo (colorSurface)
             theme.resolveAttribute(
                 com.google.android.material.R.attr.colorSurface,
                 typedValue,
@@ -331,7 +318,6 @@ class ShareBookHelper(private val context: Context) {
             )
             val surfaceColor = typedValue.data
 
-            // Color del borde (colorPrimary)
             theme.resolveAttribute(
                 com.google.android.material.R.attr.colorPrimary,
                 typedValue,
@@ -339,7 +325,6 @@ class ShareBookHelper(private val context: Context) {
             )
             val primaryColor = typedValue.data
 
-            // Fondo circular con color del tema
             val bgPaint = Paint().apply {
                 color = surfaceColor
                 isAntiAlias = true
@@ -348,7 +333,6 @@ class ShareBookHelper(private val context: Context) {
 
             canvas.drawCircle(centerX, centerY, (logoSize / 2f) + 12f, bgPaint)
 
-            // Borde circular con color primario
             val borderPaint = Paint().apply {
                 color = primaryColor
                 alpha = 100
@@ -359,7 +343,6 @@ class ShareBookHelper(private val context: Context) {
 
             canvas.drawCircle(centerX, centerY, (logoSize / 2f) + 12f, borderPaint)
 
-            // Dibujar logo con clip circular
             val path = Path().apply {
                 addCircle(centerX, centerY, logoSize / 2f, Path.Direction.CW)
             }
@@ -373,7 +356,6 @@ class ShareBookHelper(private val context: Context) {
             e.printStackTrace()
         }
 
-        // Color del texto (colorOnSurfaceVariant)
         val typedValue = android.util.TypedValue()
         context.theme.resolveAttribute(
             com.google.android.material.R.attr.colorOnSurfaceVariant,
@@ -382,7 +364,6 @@ class ShareBookHelper(private val context: Context) {
         )
         val textColor = typedValue.data
 
-        // Texto con color del tema
         val textPaint = Paint().apply {
             color = textColor
             textSize = 28f
@@ -450,24 +431,37 @@ class ShareBookHelper(private val context: Context) {
                 android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
+    // ✅ MÉTODO CORREGIDO CON STRING RESOURCES
     fun shareBook(imageUri: Uri, book: Book) {
         val shareText = buildString {
-            append("📚 Acabo de terminar de leer:\n\n")
-            append("\"${book.title}\"\n")
-            append("por ${book.authorsString}\n\n")
+            // ✅ Texto inicial
+            append(context.getString(R.string.share_finished_reading))
+            append("\n\n")
 
+            // Título del libro (no necesita traducción)
+            append("\"${book.title}\"\n")
+
+            // ✅ "por [autor]" traducido
+            append(context.getString(R.string.share_by_author, book.authorsString))
+            append("\n\n")
+
+            // ✅ Rating traducido
             book.rating?.let {
-                append("⭐ Mi calificación: $it/5\n\n")
+                append(context.getString(R.string.share_my_rating, it))
+                append("\n\n")
             }
 
+            // ✅ Tiempo de lectura traducido
             book.startDate?.let { start ->
                 book.finishDate?.let { finish ->
                     val days = ((finish - start) / (1000 * 60 * 60 * 24)).toInt()
-                    append("📖 Tiempo de lectura: $days días\n\n")
+                    append(context.getString(R.string.share_reading_time, days))
+                    append("\n\n")
                 }
             }
 
-            append("#BookTracker #Libros #Lectura")
+            // ✅ Hashtags traducidos
+            append(context.getString(R.string.share_hashtags))
         }
 
         val intent = Intent(Intent.ACTION_SEND).apply {
@@ -477,7 +471,10 @@ class ShareBookHelper(private val context: Context) {
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
 
-        context.startActivity(Intent.createChooser(intent, "Compartir lectura"))
+        // ✅ Título del diálogo traducido
+        context.startActivity(
+            Intent.createChooser(intent, context.getString(R.string.share_dialog_title))
+        )
     }
 
     private fun drawStar(
@@ -497,15 +494,11 @@ class ShareBookHelper(private val context: Context) {
             val x = (cx.toDouble() + cos(a) * r.toDouble()).toFloat()
             val y = (cy.toDouble() + sin(a) * r.toDouble()).toFloat()
 
-
-
-
             if (i == 0) path.moveTo(x, y) else path.lineTo(x, y)
         }
         path.close()
         canvas.drawPath(path, paint)
     }
-
 
     private fun drawRating(canvas: Canvas, rating: Int, centerX: Float, y: Float) {
         val starSize = 26f
@@ -534,24 +527,11 @@ class ShareBookHelper(private val context: Context) {
             val x = startX + i * (starSize * 2 + spacing)
 
             if (i < rating) {
-                // volumen
                 drawStar(canvas, x, y + 4f, starSize, depthPaint)
                 drawStar(canvas, x, y, starSize, filledPaint)
             } else {
                 drawStar(canvas, x, y, starSize, emptyPaint)
             }
         }
-
-        val ratingTextPaint = Paint().apply {
-            color = Color.parseColor("#D4A59A")
-            textSize = 36f
-            textAlign = Paint.Align.CENTER
-            typeface = Typeface.DEFAULT_BOLD
-            isAntiAlias = true
-        }
-
-        //canvas.drawText("$rating/5", centerX, y + 70f, ratingTextPaint)
     }
-
-
 }

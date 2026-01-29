@@ -30,7 +30,6 @@ class FavoritesFragment : Fragment() {
 
     private lateinit var emptyState: View
     private lateinit var emptyAnimation: LottieAnimationView
-
     private lateinit var emptyTitle: TextView
 
     override fun onCreateView(
@@ -48,14 +47,12 @@ class FavoritesFragment : Fragment() {
 
         emptyState = view.findViewById(R.id.emptyState)
         emptyAnimation = view.findViewById(R.id.lottieEmpty)
-
-        // 2. Initialize the TextView here, where 'view' is available
         emptyTitle = view.findViewById(R.id.tvEmptyTitle)
 
-        // 3. Set the text here, inside a method
-        emptyTitle.text = "No tienes libros favoritos aún"
-        setupLottie()
+        // ✅ Usando string resource
+        emptyTitle.text = getString(R.string.favorites_empty_title)
 
+        setupLottie()
         setupSwipeRefresh(view)
         setupRecyclerView(view)
         setupObservers()
@@ -99,7 +96,7 @@ class FavoritesFragment : Fragment() {
                 val dialog = BookDetailDialogFragment.newInstance(book)
                 dialog.show(parentFragmentManager, "book_detail")
             },
-            onDeleteClick = { book -> // NUEVO
+            onDeleteClick = { book ->
                 showDeleteConfirmation(book)
             },
             onRatingChanged = { book, rating ->
@@ -117,7 +114,6 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        //  FILTRAR solo los favoritos
         viewModel.finishedBooks.observe(viewLifecycleOwner) { books ->
             swipeRefresh.isRefreshing = false
 
@@ -139,15 +135,21 @@ class FavoritesFragment : Fragment() {
 
     private fun showDeleteConfirmation(book: Book) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Eliminar libro")
-            .setMessage("¿Estás seguro de que deseas eliminar \"${book.title}\" de tu biblioteca?")
-            .setPositiveButton("Eliminar") { _, _ ->
+            // ✅ Usando string resources
+            .setTitle(getString(R.string.favorites_delete_title))
+            .setMessage(getString(R.string.favorites_delete_message, book.title))
+            .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
                 viewModel.removeFromRead(book)
-                Toast.makeText(requireContext(), "Libro eliminado", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.toast_book_deleted),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
+
     override fun onPause() {
         super.onPause()
         emptyAnimation.pauseAnimation()
@@ -164,5 +166,4 @@ class FavoritesFragment : Fragment() {
         emptyAnimation.cancelAnimation()
         super.onDestroyView()
     }
-
 }

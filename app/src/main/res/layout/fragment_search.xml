@@ -35,7 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:hint="Título, autor o tema..."
+                android:hint="@string/search_hint"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:maxLines="1"
@@ -45,7 +45,7 @@
                 android:id="@+id/btnSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Buscar"
+                android:text="@string/search_button"
                 android:textSize="14sp"
                 style="@style/Button.Primary" />
 
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Busca tu próximo libro"
+            android:text="@string/comenzar"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="18sp"
             style="@style/TextAppearance.BookTracker.Headline"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:gravity="center"
-            android:text="Explora miles de libros por título, autor o tema"
+            android:text="@string/search_empty_subtitle"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="14sp" />
 

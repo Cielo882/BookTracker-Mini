@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Buscar Libros"
+        android:text="@string/buscar_libros"
         android:textSize="20sp"
         style="@style/TextAppearance.BookTracker.Headline"
         android:textColor="?attr/colorOnSurface"
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="12dp"
-        android:hint="Título, autor o tema...">
+        android:hint="@string/search_hint">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearch"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="Buscar"
+        android:text="@string/search_button"
         android:layout_marginBottom="16dp"
         style="@style/Button.Primary" />
 

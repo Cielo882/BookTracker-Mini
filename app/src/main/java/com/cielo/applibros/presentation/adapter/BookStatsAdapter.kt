@@ -31,8 +31,14 @@ class BookStatsAdapter : ListAdapter<Pair<Book, Int>, BookStatsAdapter.StatsView
             val (book, days) = data
 
             tvTitle.text = book.title
-            tvDays.text = "$days días"
-            tvRating.text = book.rating?.let { "⭐ $it" } ?: "Sin calificar"
+
+            // ✅ Usando string resource con parámetro
+            tvDays.text = itemView.context.getString(R.string.stats_days, days)
+
+            // ✅ Usando string resources
+            tvRating.text = book.rating?.let {
+                itemView.context.getString(R.string.stats_rating, it)
+            } ?: itemView.context.getString(R.string.stats_no_rating)
         }
     }
 

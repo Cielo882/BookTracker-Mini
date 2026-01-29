@@ -41,7 +41,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Configuración"
+                android:text="@string/configuraci_n"
                 android:textSize="24sp"
                 android:textColor="?attr/colorOnSurface"
                 style="@style/TextAppearance.BookTracker.Headline"
@@ -90,7 +90,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Idioma de búsqueda"
+                        android:text="@string/idioma"
                         android:textSize="18sp"
                         android:textColor="?attr/colorOnSurface"
                         style="@style/TextAppearance.BookTracker.Headline"
@@ -102,7 +102,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Los resultados mostrarán libros en el idioma seleccionado"
+                    android:text="@string/idioma_seleccionado"
                     android:textSize="14sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginBottom="16dp" />
@@ -116,7 +116,7 @@
                         android:id="@+id/rbSpanish"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Español"
+                        android:text="@string/espa_ol"
                         android:textSize="16sp"
                         android:padding="12dp" />
 
@@ -124,7 +124,7 @@
                         android:id="@+id/rbEnglish"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="English"
+                        android:text="@string/english"
                         android:textSize="16sp"
                         android:padding="12dp" />
 
@@ -174,7 +174,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Elige un color"
+                        android:text="@string/elige_tema"
                         android:textSize="18sp"
                         android:textColor="?attr/colorOnSurface"
                         style="@style/TextAppearance.BookTracker.Headline"
@@ -186,7 +186,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Elige el modo de visualización"
+                    android:text="@string/elige_el_modo_de_visualizaci_n"
                     android:textSize="14sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginBottom="16dp" />
@@ -200,7 +200,7 @@
                         android:id="@+id/rbLight"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="☀️ Modo claro"
+                        android:text="@string/modo_claro"
                         android:textSize="16sp"
 
                         android:padding="12dp" />
@@ -209,7 +209,7 @@
                         android:id="@+id/rbDark"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="🌙 Modo oscuro"
+                        android:text="@string/modo_oscuro"
                         android:textSize="16sp"
                         android:padding="12dp" />
 
@@ -217,7 +217,7 @@
                         android:id="@+id/rbSystem"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="📱 Según el sistema"
+                        android:text="@string/seg_n_el_sistema"
                         android:textSize="16sp"
                         android:padding="12dp" />
 
@@ -234,7 +234,7 @@
             android:id="@+id/btnAccept"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="✓ Aceptar"
+            android:text="@string/ok"
             android:textSize="16sp"
             android:textStyle="bold"
             android:paddingVertical="16dp"
@@ -279,7 +279,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Respaldo de Datos"
+                android:text="@string/respaldo_de_datos"
                 android:textSize="18sp"
                 android:textColor="?attr/colorOnSurface"
                 style="@style/TextAppearance.BookTracker.Headline"
@@ -305,7 +305,7 @@
                     style="@style/Button.Primary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📤 Exportar mi biblioteca"
+                    android:text="@string/exportar_mi_biblioteca"
                     android:layout_marginBottom="8dp" />
 
                 <Button
@@ -313,12 +313,12 @@
                     style="@style/Button.Secondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📥 Importar desde respaldo" />
+                    android:text="@string/importar_desde_respaldo" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Guarda una copia de seguridad de tu biblioteca en formato JSON"
+                    android:text="@string/guarda_una_copia_de_seguridad_de_tu_biblioteca_en_formato_json"
                     android:textSize="12sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:layout_marginTop="8dp" />
@@ -429,7 +429,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Información legal"
+                android:text="@string/informaci_n_legal"
                 android:textSize="18sp"
                 android:textColor="?attr/colorOnSurface"
                 style="@style/TextAppearance.BookTracker.Headline"
@@ -455,7 +455,7 @@
                     android:id="@+id/tvPrivacyPolicy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🔒 Política de privacidad"
+                    android:text="@string/pol_tica_de_privacidad"
                     android:textSize="16sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:padding="16dp"
@@ -473,7 +473,7 @@
                     android:id="@+id/tvTerms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="📜 Términos y condiciones"
+                    android:text="@string/t_rminos_y_condiciones"
                     android:textSize="16sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:padding="16dp"

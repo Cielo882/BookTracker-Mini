@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BookTracker Mini</string>
+
+    <!-- Navigation Drawer -->
+    <string name="navigation_drawer_open">Open navigation menu</string>
+    <string name="navigation_drawer_close">Close navigation menu</string>
+    <string name="profile_image">Profile image</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_to_read">To Read</string>
+    <string name="nav_reading">Reading</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_finished">Finished</string>
+
+    <!-- Drawer Menu -->
+    <string name="nav_profile">My Profile</string>
+    <string name="nav_statistics">Statistics</string>
+    <string name="nav_favorites">Favorites</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_about">About</string>
+
+    <!-- Search Fragment -->
+    <string name="search_hint">Title, author, or topic...</string>
+    <string name="search_button">Search</string>
+    <string name="search_empty_title">Add a book to get started</string>
+    <string name="search_empty_subtitle">Explore thousands of books by title, author, or topic</string>
+    <string name="search_no_results">No results found</string>
+    <string name="search_error">Search error</string>
+
+    <!-- Book Actions -->
+    <string name="add_to_to_read">To read</string>
+    <string name="add_to_reading">Reading</string>
+    <string name="add_to_finished">Finished</string>
+    <string name="mark_as_favorite">Mark as favorite</string>
+    <string name="remove_favorite">Remove from favorites</string>
+
+    <!-- Book Detail -->
+    <string name="reading_status">Reading status</string>
+    <string name="rating">Rating</string>
+    <string name="my_review">My review</string>
+    <string name="write_review_hint">Write your review...</string>
+    <string name="mark_favorite">Mark as favorite</string>
+    <string name="started_on">Started:</string>
+    <string name="finished_on">Finished:</string>
+    <string name="save">Save</string>
+    <string name="close">Close</string>
+
+    <!-- Profile -->
+    <string name="my_statistics">My Statistics</string>
+    <string name="total_read">Read</string>
+    <string name="total_to_read">To read</string>
+    <string name="average_rating">Average</string>
+    <string name="currently_reading">Currently Reading</string>
+    <string name="my_favorites">My Favorites</string>
+    <string name="no_books_yet">You don’t have any books here yet</string>
+
+    <!-- Common -->
+    <string name="loading">Loading...</string>
+    <string name="error">Error</string>
+    <string name="retry">Retry</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="understood">Got it</string>
+    <string name="coming_soon">Coming soon</string>
+
+    <!-- Messages -->
+    <string name="book_added">Book added!</string>
+    <string name="book_removed">Book removed</string>
+    <string name="book_updated">Book updated</string>
+    <string name="continue_searching">Continue searching</string>
+    <string name="view_section">View</string>
+
+    <!-- About -->
+    <string name="about_app">About BookTracker</string>
+    <string name="about_message">
+        BookTracker Mini v2.0\n\nYour personal library to organize and track your reading.\n\nDeveloped with ❤️ by Mini apps_
+    </string>
+
+    <!-- Empty States -->
+    <string name="empty_to_read">You don’t have any books to read.\nSearch and add some!</string>
+    <string name="empty_reading">You’re not currently reading any books.</string>
+    <string name="empty_finished">You haven’t finished any books yet.\nStart reading!</string>
+    <string name="empty_favorites">You don’t have any favorites.\nMark finished books as favorites.</string>
+    <string name="book_cover">Book cover</string>
+
+    <string name="estad_sticas_de_lectura">📊 Reading Statistics</string>
+    <string name="resumen_general">Overview</string>
+    <string name="lei_dos">Read</string>
+    <string name="leyendo">Reading</string>
+    <string name="por_leer">To read</string>
+    <string name="m_tricas_de_lectura">Reading Metrics</string>
+    <string name="calificaci_n_promedio">Average rating:</string>
+    <string name="tiempo_promedio_de_lectura">Average reading time:</string>
+    <string name="libro_m_s_r_pido">Fastest book:</string>
+    <string name="libro_m_s_lento">Slowest book:</string>
+    <string name="este_a_no">This year</string>
+    <string name="libros_este_a_no">Books this year</string>
+    <string name="libros_este_mes">Books this month</string>
+    <string name="ver_gr_fico_de_progreso">View progress chart</string>
+    <string name="progreso_de_lectura_este_a_no">📈 Reading Progress - This Year</string>
+    <string name="n_nno_hay_suficientes_datos_para_nmostrar_el_gr_fico_de_este_a_no">
+        📊\n\nNot enough data to\nshow the chart
+    </string>
+
+    <string name="comenzar">Get started</string>
+    <string name="saltar">Skip</string>
+    <string name="estado_de_lectura">Reading status</string>
+    <string name="fecha_de_inicio">Start date</string>
+    <string name="sin_fecha">No date</string>
+    <string name="editar_fecha">Edit date</string>
+    <string name="fecha_de_t_rmino">Finish date</string>
+    <string name="compartir">Share</string>
+    <string name="buscar_libros">Search books</string>
+
+    <string name="crea_tu_avatar">Create your avatar</string>
+    <string name="dibuja_una_carita_con_tu_dedo">Draw a little face with your finger :)</string>
+    <string name="elige_un_color">Choose a color</string>
+    <string name="negro">Black</string>
+    <string name="rojo">Red</string>
+    <string name="verde">Green</string>
+    <string name="azul">Blue</string>
+    <string name="amarillo">Yellow</string>
+    <string name="morado">Purple</string>
+    <string name="borrar_dibujo">Clear drawing</string>
+    <string name="usar_mi_inicial">Use my initial</string>
+
+    <string name="c_mo_te_llamas">What’s your name?</string>
+    <string name="te_daremos_la_bienvenida_personalizada">We’ll give you a personalized welcome</string>
+    <string name="tu_nombre">Your name</string>
+    <string name="puedes_cambiarlo_despu_s_en_ajustes">You can change it later in settings</string>
+
+    <string name="tu_registro_personal">Your personal log</string>
+    <string name="organiza_tu_colecci_n_registra_tu_progreso_y_descubre_tu_pr_xima_lectura_favorita">
+        Organize your collection, track your progress, and discover your next favorite read
+    </string>
+
+    <string name="mis_lecturas">My Reading</string>
+    <string name="ltimos_libros_le_dos">Recently Finished Books</string>
+    <string name="registro_general">Reading Log</string>
+    <string name="historial_de_todos_tus_libros_terminados">History of all your finished books</string>
+
+    <string name="n_na_n_no_has_terminado_ning_n_libro_ncon_fechas_registradas">
+        📚\n\nYou haven’t finished any books\nwith recorded dates yet
+    </string>
+
+    <string name="configuraci_n">Settings</string>
+    <string name="idioma">Language</string>
+    <string name="idioma_seleccionado">Results will show books in the selected language</string>
+    <string name="espa_ol">Spanish</string>
+    <string name="english">English</string>
+
+    <string name="elige_tema">Choose theme</string>
+    <string name="elige_el_modo_de_visualizaci_n">Choose display mode</string>
+    <string name="modo_claro">☀️ Light mode</string>
+    <string name="modo_oscuro">🌙 Dark mode</string>
+    <string name="seg_n_el_sistema">📱 System default</string>
+
+    <string name="respaldo_de_datos">Data backup</string>
+    <string name="exportar_mi_biblioteca">📤 Export my library</string>
+    <string name="importar_desde_respaldo">📥 Import from backup</string>
+    <string name="guarda_una_copia_de_seguridad_de_tu_biblioteca_en_formato_json">
+        Save a backup copy of your library in JSON format
+    </string>
+
+    <string name="informaci_n_legal">Legal information</string>
+    <string name="pol_tica_de_privacidad">🔒 Privacy policy</string>
+    <string name="t_rminos_y_condiciones">📜 Terms and conditions</string>
+
+    <string name="ya_agregado">Already added</string>
+    <string name="lector_apasionado">Avid Reader</string>
+    <string name="lector_apasionado2">Avid reader 🔥</string>
+    <string name="toca_para_personalizar">✏️ Tap to customize</string>
+
+    <!-- Favorites Fragment -->
+    <string name="favorites_empty_title">You don\'t have any favorite books yet</string>
+    <string name="favorites_delete_title">Delete book</string>
+    <string name="favorites_delete_message">Are you sure you want to delete \"%1$s\" from your library?</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="toast_book_deleted">Book deleted</string>
+    <string name="toast_settings_saved">Settings saved</string>
+
+    <!-- Search Fragment -->
+    <string name="search_error_empty">Enter a search term</string>
+    <string name="search_no_results_title">No results</string>
+    <string name="search_no_results_message">No books found with that criteria. Try another term.</string>
+    <string name="search_error_title">Error</string>
+    <string name="search_book_added_title">Book added!</string>
+    <string name="search_book_added_message">\"%1$s\" was added to %2$s</string>
+    <string name="search_view_book">View</string>
+    <string name="search_continue_searching">Continue searching</string>
+    <string name="btn_understood">Got it</string>
+    <string name="btn_retry">Retry</string>
+
+    <!-- Reading Status -->
+    <string name="status_to_read">Want to Read</string>
+    <string name="status_reading">Reading</string>
+    <string name="status_finished">Read</string>
+
+    <!-- Book Stats Adapter -->
+    <string name="stats_days">%d days</string>
+    <string name="stats_rating">⭐ %d</string>
+    <string name="stats_no_rating">Not rated</string>
+
+    <!-- Share Book Helper -->
+    <string name="share_finished_reading">📚 I just finished reading:</string>
+    <string name="share_by_author">by %s</string>
+    <string name="share_my_rating">⭐ My rating: %d/5</string>
+    <string name="share_reading_time">📖 Reading time: %d days</string>
+    <string name="share_hashtags">#BookTracker #Books #Reading</string>
+    <string name="share_dialog_title">Share book</string>
+
+    <!-- Stats on Image -->
+    <string name="stats_read_in_one_day">📖 Read in 1 day</string>
+    <string name="stats_read_in_days">📖 Read in %d days</string>
+    <string name="stats_finished_on">📅 Finished: %s</string>
+</resources>

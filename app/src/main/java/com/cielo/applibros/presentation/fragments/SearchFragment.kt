@@ -34,7 +34,6 @@ class SearchFragment : Fragment() {
 
     private var networkDialogShown = false
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +45,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Obtener ViewModel desde MainActivity
         viewModel = (activity as MainActivity).getBookViewModel()
 
         setupViews(view)
@@ -70,11 +68,9 @@ class SearchFragment : Fragment() {
             onAddBook = { book, status ->
                 val bookWithStatus = book.copy(readingStatus = status)
                 viewModel.addToRead(bookWithStatus)
-                //showBookAddedConfirmation(book.title, status)
-                // NUEVO: Actualizar lista de IDs existentes
                 loadExistingBookIds()
             },
-            existingBookIds = existingBookIds // Pasar los IDs
+            existingBookIds = existingBookIds
         )
 
         rvSearchResults.apply {
@@ -86,12 +82,10 @@ class SearchFragment : Fragment() {
     private fun setupObservers() {
         viewModel.books.observe(viewLifecycleOwner) { books ->
             if (books.isNotEmpty()) {
-                // Mostrar resultados
                 emptyState.visibility = View.GONE
                 rvSearchResults.visibility = View.VISIBLE
                 searchAdapter.submitList(books)
             } else {
-                // Si la búsqueda se completó pero no hay resultados
                 if (viewModel.isLoading.value == false && etSearch.text?.isNotBlank() == true) {
                     showNoResults()
                 }
@@ -109,7 +103,6 @@ class SearchFragment : Fragment() {
 
         viewModel.error.observe(viewLifecycleOwner) { error ->
             error?.let {
-
                 when (it) {
                     is AppError.NetworkError -> {
                         if (!networkDialogShown) {
@@ -127,8 +120,6 @@ class SearchFragment : Fragment() {
                             )
                         }
                     }
-
-
                     else -> {
                         ErrorHandler.showErrorSnackbar(
                             view = requireView(),
@@ -138,8 +129,6 @@ class SearchFragment : Fragment() {
                 }
             }
         }
-
-
     }
 
     private fun setupListeners() {
@@ -147,38 +136,32 @@ class SearchFragment : Fragment() {
             performSearch()
         }
 
-        // Búsqueda al presionar Enter
         etSearch.setOnEditorActionListener { _, _, _ ->
             performSearch()
             true
         }
     }
 
-    // Cargar todos los IDs de libros existentes
     private fun loadExistingBookIds() {
         viewModel.booksToRead.observe(viewLifecycleOwner) { toReadBooks ->
             viewModel.currentlyReading.observe(viewLifecycleOwner) { readingBooks ->
                 viewModel.finishedBooks.observe(viewLifecycleOwner) { finishedBooks ->
-                    // Combinar todos los IDs
                     existingBookIds = (
                             toReadBooks.map { it.id } +
                                     readingBooks.map { it.id } +
                                     finishedBooks.map { it.id }
                             ).toSet()
 
-                    // Actualizar el adaptador con los nuevos IDs
                     if (::searchAdapter.isInitialized) {
                         searchAdapter = SearchBookAdapter(
                             onAddBook = { book, status ->
                                 val bookWithStatus = book.copy(readingStatus = status)
                                 viewModel.addToRead(bookWithStatus)
-                                //showBookAddedConfirmation(book.title, status)
                                 loadExistingBookIds()
                             },
                             existingBookIds = existingBookIds
                         )
                         rvSearchResults.adapter = searchAdapter
-                        // Re-submitir la lista actual
                         viewModel.books.value?.let { searchAdapter.submitList(it) }
                     }
                 }
@@ -186,13 +169,13 @@ class SearchFragment : Fragment() {
         }
     }
 
-
     private fun performSearch() {
         val query = etSearch.text.toString().trim()
         if (query.isNotBlank()) {
             viewModel.searchBooks(query)
         } else {
-            etSearch.error = "Ingresa un término de búsqueda"
+            // ✅ Usando string resource
+            etSearch.error = getString(R.string.search_error_empty)
         }
     }
 
@@ -201,39 +184,41 @@ class SearchFragment : Fragment() {
         rvSearchResults.visibility = View.GONE
 
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Sin resultados")
-            .setMessage("No se encontraron libros con ese criterio. Intenta con otro término.")
-            .setPositiveButton("Entendido", null)
+            // ✅ Usando string resources
+            .setTitle(getString(R.string.search_no_results_title))
+            .setMessage(getString(R.string.search_no_results_message))
+            .setPositiveButton(getString(R.string.btn_understood), null)
             .show()
     }
 
     private fun showError(errorMessage: String) {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Error")
+            // ✅ Usando string resources
+            .setTitle(getString(R.string.search_error_title))
             .setMessage(errorMessage)
-            .setPositiveButton("Reintentar") { _, _ ->
+            .setPositiveButton(getString(R.string.btn_retry)) { _, _ ->
                 performSearch()
             }
-            .setNegativeButton("Cancelar", null)
+            .setNegativeButton(getString(R.string.btn_cancel), null)
             .show()
     }
 
     private fun showBookAddedConfirmation(bookTitle: String, status: ReadingStatus) {
+        // ✅ Convertir status a string traducido
         val statusText = when (status) {
-            ReadingStatus.TO_READ -> "Por Leer"
-            ReadingStatus.READING -> "Leyendo"
-            ReadingStatus.FINISHED -> "Leídos"
+            ReadingStatus.TO_READ -> getString(R.string.status_to_read)
+            ReadingStatus.READING -> getString(R.string.status_reading)
+            ReadingStatus.FINISHED -> getString(R.string.status_finished)
         }
 
-
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("¡Libro agregado!")
-            .setMessage("\"$bookTitle\" fue agregado a $statusText")
-            .setPositiveButton("Ver") { _, _ ->
-                // Navegar a la sección correspondiente
+            // ✅ Usando string resources con parámetros
+            .setTitle(getString(R.string.search_book_added_title))
+            .setMessage(getString(R.string.search_book_added_message, bookTitle, statusText))
+            .setPositiveButton(getString(R.string.search_view_book)) { _, _ ->
                 (activity as? MainActivity)?.navigateToStatus(status)
             }
-            .setNegativeButton("Continuar buscando", null)
+            .setNegativeButton(getString(R.string.search_continue_searching), null)
             .show()
     }
 }

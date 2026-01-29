@@ -24,7 +24,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="¿Cómo te llamas?"
+        android:text="@string/c_mo_te_llamas"
         android:textSize="28sp"
         style="@style/TextAppearance.BookTracker.Headline"
         android:textColor="?attr/colorOnSurface"
@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Te daremos la bienvenida personalizada"
+        android:text="@string/te_daremos_la_bienvenida_personalizada"
         android:textSize="14sp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textAlignment="center"
@@ -46,7 +46,7 @@
         style="@style/TextInputLayout.Outlined"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Tu nombre"
+        android:hint="@string/tu_nombre"
         app:boxStrokeColor="?attr/colorOnSurface"
         app:hintTextColor="?attr/colorOnSurface">
 
@@ -67,7 +67,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Puedes cambiarlo después en ajustes"
+        android:text="@string/puedes_cambiarlo_despu_s_en_ajustes"
         android:textSize="12sp"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:layout_marginTop="16dp" />

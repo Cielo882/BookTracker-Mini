@@ -11,7 +11,7 @@
         android:id="@+id/tvAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="BookTracker Mini"
+        android:text= "@string/app_name"
         android:textSize="36sp"
         style="@style/TextAppearance.BookTracker.Headline"
         android:textColor="?attr/colorOnPrimary"

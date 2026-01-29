@@ -34,6 +34,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.Build
 import android.util.Log
 import com.cielo.applibros.presentation.onboarding.OnboardingActivity
 import android.widget.ImageView
@@ -44,7 +45,9 @@ import com.google.android.material.card.MaterialCardView
 import androidx.appcompat.app.AlertDialog
 import android.view.View
 import com.cielo.applibros.data.local.UserProfile
+import com.cielo.applibros.domain.model.Language
 import java.util.Calendar
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -71,6 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        applyAppLanguage()
         super.onCreate(savedInstanceState)
 
         initializeFirebase()
@@ -103,6 +107,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             loadFragment(ToReadFragment())
             bottomNavigation.selectedItemId = R.id.nav_to_read
         }
+    }
+
+    private fun applyAppLanguage() {
+        val settingsPrefs = SettingsPreferences(this)
+        val language = settingsPrefs.getSettings().language
+
+        val locale = when (language) {
+            Language.SPANISH -> Locale("es")
+            Language.ENGLISH -> Locale("en")
+        }
+
+        Locale.setDefault(locale)
+
+        val config = resources.configuration
+        config.setLocale(locale)
+
+        // Para Android 7.0 y superior
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            createConfigurationContext(config)
+        }
+
+        // Actualizar la configuración
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     private fun initializeFirebase() {

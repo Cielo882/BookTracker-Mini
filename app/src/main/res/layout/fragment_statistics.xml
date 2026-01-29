@@ -17,7 +17,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="📊 Estadísticas de Lectura"
+            android:text="@string/estad_sticas_de_lectura"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="?attr/colorOnSurface"
@@ -44,7 +44,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Resumen General"
+                    android:text="@string/resumen_general"
                     android:textSize="18sp"
                     style="@style/TextAppearance.BookTracker.Headline"
                     android:textColor="?attr/colorOnSurface"
@@ -76,7 +76,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Leídos"
+                            android:text="@string/lei_dos"
                             android:textSize="12sp"
                             android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -102,7 +102,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Leyendo"
+                            android:text="@string/leyendo"
                             android:textSize="12sp"
                             android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -128,7 +128,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Por leer"
+                            android:text="@string/por_leer"
                             android:textSize="12sp"
                             android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -158,7 +158,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Métricas de Lectura"
+                    android:text="@string/m_tricas_de_lectura"
                     android:textSize="18sp"
                     style="@style/TextAppearance.BookTracker.Headline"
                     android:textColor="?attr/colorOnSurface"
@@ -175,7 +175,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Calificación promedio:"
+                        android:text="@string/calificaci_n_promedio"
                         android:textSize="14sp"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -207,7 +207,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Tiempo promedio de lectura:"
+                        android:text="@string/tiempo_promedio_de_lectura"
                         android:textSize="14sp"
                         android:textColor="?attr/colorOnSurfaceVariant" />
 
@@ -265,7 +265,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Libro más rápido:"
+                            android:text="@string/libro_m_s_r_pido"
                             android:textSize="14sp"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:layout_marginBottom="0dp"
@@ -326,7 +326,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Libro más lento:"
+                            android:text="@string/libro_m_s_lento"
                             android:textSize="14sp"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:layout_marginBottom="0dp"
@@ -369,7 +369,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Este Año"
+                    android:text="@string/este_a_no"
                     android:textSize="18sp"
                     style="@style/TextAppearance.BookTracker.Headline"
                     android:textColor="?attr/colorOnSurface"
@@ -401,7 +401,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Libros este año"
+                            android:text="@string/libros_este_a_no"
                             android:textSize="12sp"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:gravity="center" />
@@ -428,7 +428,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Libros este mes"
+                            android:text="@string/libros_este_mes"
                             android:textSize="12sp"
                             android:textColor="?attr/colorOnSurfaceVariant"
                             android:gravity="center" />
@@ -446,7 +446,7 @@
             android:id="@+id/btnToggleChart"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ver Gráfico de Progreso"
+            android:text="@string/ver_gr_fico_de_progreso"
             android:textColor="?attr/colorOnPrimary"
             app:icon="@drawable/ic_arrow_down"
             app:iconGravity="start"
@@ -473,7 +473,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="📈 Progreso de Lectura - 2025"
+                    android:text="@string/progreso_de_lectura_este_a_no"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:textColor="?attr/colorOnSurface"
@@ -490,7 +490,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="📊\n\nNo hay suficientes datos para\nmostrar el gráfico de este año"
+                    android:text="@string/n_nno_hay_suficientes_datos_para_nmostrar_el_gr_fico_de_este_a_no"
                     android:textSize="14sp"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textAlignment="center"
