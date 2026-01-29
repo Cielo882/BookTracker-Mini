@@ -2,15 +2,16 @@ package com.cielo.applibros.data.local
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.cielo.applibros.R
 
 data class UserProfile(
-    val name: String = "Lector Apasionado",
-    val avatarDrawing: String = "",  // Base64 del dibujo
-    val useInitial: Boolean = true,  // Si usa inicial o dibujo
+    val name: String,
+    val avatarDrawing: String = "",
+    val useInitial: Boolean = true,
     val memberSince: Long = System.currentTimeMillis()
 )
 
-class UserProfileHelper(context: Context) {
+class UserProfileHelper(private val context: Context) {
 
     private val prefs: SharedPreferences =
         context.getSharedPreferences("user_profile", Context.MODE_PRIVATE)
@@ -33,27 +34,34 @@ class UserProfileHelper(context: Context) {
             apply()
         }
     }
+
     fun getProfile(): UserProfile {
+        // ✅ Usar string resource para el nombre por defecto
+        val defaultName = context.getString(R.string.default_reader_name)
+
         return UserProfile(
-            name = prefs.getString("name", "Lector Apasionado") ?: "Lector Apasionado",
+            name = prefs.getString("name", defaultName) ?: defaultName,
             avatarDrawing = prefs.getString("avatar_drawing", "") ?: "",
             useInitial = prefs.getBoolean("use_initial", true),
             memberSince = prefs.getLong("member_since", System.currentTimeMillis())
         )
     }
 
+    // ✅ MÉTODO CORREGIDO con string resources
     fun getReaderTitle(booksThisYear: Int): String {
         return when {
-            booksThisYear == 0 -> "Nuevo lector 📚"
-            booksThisYear < 5 -> "Lector casual 📖"
-            booksThisYear < 12 -> "Lector apasionado 🔥"
-            booksThisYear < 24 -> "Lector voraz 🚀"
-            booksThisYear < 50 -> "Lector extremo ⚡"
-            else -> "Leyenda literaria 👑"
+            booksThisYear == 0 -> context.getString(R.string.reader_title_new)
+            booksThisYear < 5 -> context.getString(R.string.reader_title_casual)
+            booksThisYear < 12 -> context.getString(R.string.reader_title_passionate)
+            booksThisYear < 24 -> context.getString(R.string.reader_title_voracious)
+            booksThisYear < 50 -> context.getString(R.string.reader_title_extreme)
+            else -> context.getString(R.string.reader_title_legend)
         }
     }
 
+    // ✅ MÉTODO CORREGIDO con string resource
     fun getInitialFromName(name: String): String {
-        return name.firstOrNull()?.uppercase() ?: "L"
+        val defaultInitial = context.getString(R.string.default_initial)
+        return name.firstOrNull()?.uppercase() ?: defaultInitial
     }
 }

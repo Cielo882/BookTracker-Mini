@@ -18,8 +18,7 @@ class BookAdapter(
     private val onBookClick: (Book) -> Unit,
     private val onRatingChanged: (Book, Float) -> Unit,
     private val onFavoriteClick: ((Book) -> Unit)? = null,
-    private val onDeleteClick: ((Book) -> Unit)? = null // NUEVO
-
+    private val onDeleteClick: ((Book) -> Unit)? = null
 ) : ListAdapter<Book, BookAdapter.BookViewHolder>(BookDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -35,56 +34,56 @@ class BookAdapter(
     inner class BookViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val titleTextView: TextView = itemView.findViewById(R.id.tvTitle)
         private val authorTextView: TextView = itemView.findViewById(R.id.tvAuthor)
-        private val statusTextView: TextView = itemView.findViewById(R.id.tvStatus) // Nuevo
+        private val statusTextView: TextView = itemView.findViewById(R.id.tvStatus)
         private val coverImageView: ImageView = itemView.findViewById(R.id.ivCover)
-        private val statusButton: ImageView = itemView.findViewById(R.id.ivStatus) // Cambió de ivRead
-        private val favoriteButton: ImageView? = itemView.findViewById(R.id.ivFavorite) // Nuevo, opcional
-        private val deleteButton: ImageView = itemView.findViewById(R.id.ivDelete) // NUEVO
-
+        private val statusButton: ImageView = itemView.findViewById(R.id.ivStatus)
+        private val favoriteButton: ImageView? = itemView.findViewById(R.id.ivFavorite)
+        private val deleteButton: ImageView = itemView.findViewById(R.id.ivDelete)
         private val ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
         private val ratingText: TextView = itemView.findViewById(R.id.tvRatingText)
-        private val reviewText: TextView? = itemView.findViewById(R.id.tvReview) // Nuevo, opcional
+        private val reviewText: TextView? = itemView.findViewById(R.id.tvReview)
 
         fun bind(book: Book) {
-            val ribbonText: String
-            val ribbonColor: Int
-            val ribbonDarkColor: Int
             titleTextView.text = book.title
             authorTextView.text = book.authorsString
 
+            // ✅ Obtener el contexto para acceder a strings
+            val context = itemView.context
+
+            // ✅ Configurar ribbon con string resources
+            val ribbonText: String
+            val ribbonColor: Int
+
             when (book.readingStatus) {
                 ReadingStatus.TO_READ -> {
-                    ribbonText = "Por leer"
+                    ribbonText = context.getString(R.string.status_to_read)
                     ribbonColor = R.color.ribbon_to_read
-                    ribbonDarkColor = R.color.ribbon_to_read_dark
                 }
                 ReadingStatus.READING -> {
-                    ribbonText = "Leyendo"
+                    ribbonText = context.getString(R.string.status_reading)
                     ribbonColor = R.color.ribbon_reading
-                    ribbonDarkColor = R.color.ribbon_reading_dark
                 }
                 ReadingStatus.FINISHED -> {
-                    ribbonText = "Terminado"
+                    ribbonText = context.getString(R.string.status_finished)
                     ribbonColor = R.color.ribbon_finished
-                    ribbonDarkColor = R.color.ribbon_finished_dark
                 }
             }
 
             // Actualizar ribbon
             val tvStatusRibbon: TextView = itemView.findViewById(R.id.tvStatusRibbon)
             tvStatusRibbon.text = ribbonText
-            tvStatusRibbon.setBackgroundColor(itemView.context.getColor(ribbonColor))
+            tvStatusRibbon.setBackgroundColor(context.getColor(ribbonColor))
 
-            // Mostrar estado del libro
+            // ✅ Mostrar estado del libro con string resources
             statusTextView.text = when (book.readingStatus) {
-                ReadingStatus.TO_READ -> "Por leer"
-                ReadingStatus.READING -> "Leyendo"
-                ReadingStatus.FINISHED -> "Terminado"
+                ReadingStatus.TO_READ -> context.getString(R.string.status_to_read)
+                ReadingStatus.READING -> context.getString(R.string.status_reading)
+                ReadingStatus.FINISHED -> context.getString(R.string.status_finished)
             }
 
             // Cargar imagen de portada
             book.imageUrl?.let { url ->
-                Glide.with(itemView.context)
+                Glide.with(context)
                     .load(url)
                     .placeholder(R.drawable.ic_book)
                     .into(coverImageView)
@@ -101,7 +100,7 @@ class BookAdapter(
                 }
             )
 
-            // Configurar botón de favorito (si existe)
+            // Configurar botón de favorito
             favoriteButton?.let { favBtn ->
                 favBtn.setImageResource(
                     if (book.isFavorite) R.drawable.ic_favorite_filled
@@ -111,6 +110,7 @@ class BookAdapter(
                     onFavoriteClick?.invoke(book)
                 }
             }
+
             deleteButton.setOnClickListener {
                 onDeleteClick?.invoke(book)
             }
@@ -120,32 +120,34 @@ class BookAdapter(
 
             // Listeners
             itemView.setOnClickListener { onBookClick(book) }
-            //statusButton.setOnClickListener { onStatusClick(book) }
         }
 
         private fun setupRatingAndReview(book: Book) {
+            val context = itemView.context
+
             if (book.readingStatus == ReadingStatus.FINISHED) {
-                // Solo mostrar rating si fue terminado
                 ratingBar.visibility = View.VISIBLE
                 ratingText.visibility = View.VISIBLE
 
-                // Configurar el rating actual
                 val rating = book.rating?.toFloat() ?: 0f
                 ratingBar.rating = rating
+
+                // ✅ Usar string resource para "Sin calificar"
                 ratingText.text = if (rating > 0) {
                     String.format("%.1f", rating)
                 } else {
-                    "Sin calificar"
+                    context.getString(R.string.rating_unrated)
                 }
 
                 // Listener para cambios en el rating
                 ratingBar.setOnRatingBarChangeListener { _, newRating, fromUser ->
                     if (fromUser) {
                         onRatingChanged(book, newRating)
+                        // ✅ Actualizar texto con string resource
                         ratingText.text = if (newRating > 0) {
                             String.format("%.1f", newRating)
                         } else {
-                            "Sin calificar"
+                            context.getString(R.string.rating_unrated)
                         }
                     }
                 }
@@ -160,7 +162,6 @@ class BookAdapter(
                     }
                 }
             } else {
-                // Ocultar rating si no se ha terminado
                 ratingBar.visibility = View.GONE
                 ratingText.visibility = View.GONE
                 reviewText?.visibility = View.GONE

@@ -215,4 +215,18 @@
     <string name="stats_read_in_one_day">📖 Read in 1 day</string>
     <string name="stats_read_in_days">📖 Read in %d days</string>
     <string name="stats_finished_on">📅 Finished: %s</string>
+
+    <!-- Book Adapter - Reading Status -->
+
+    <string name="rating_unrated">Not rated</string>
+
+    <!-- User Profile Helper -->
+    <string name="default_reader_name">Passionate Reader</string>
+    <string name="reader_title_new">New reader 📚</string>
+    <string name="reader_title_casual">Casual reader 📖</string>
+    <string name="reader_title_passionate">Passionate reader 🔥</string>
+    <string name="reader_title_voracious">Voracious reader 🚀</string>
+    <string name="reader_title_extreme">Extreme reader ⚡</string>
+    <string name="reader_title_legend">Literary legend 👑</string>
+    <string name="default_initial">R</string>
 </resources>
