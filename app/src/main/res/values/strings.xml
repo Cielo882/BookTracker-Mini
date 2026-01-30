@@ -209,4 +209,17 @@
     <string name="reader_title_legend">Leyenda literaria 👑</string>
     <string name="default_initial">L</string>
 
+    <!-- Search Fragment -->
+    <string name="search_wait_message">Espera un momento...</string>
+
+    <!-- Search Book Adapter -->
+    <string name="adapter_book_added">✓ Añadido</string>
+    <string name="adapter_already_added">Ya agregado</string>
+    <string name="adapter_add_button">+</string>
+
+    <!-- Popup Menu Options -->
+    <string name="menu_want_to_read">Por leer</string>
+    <string name="menu_reading">Leyendo</string>
+    <string name="menu_finished">Leído</string>
+
 </resources>

@@ -17,8 +17,7 @@ import com.cielo.applibros.domain.model.ReadingStatus
 
 class SearchBookAdapter(
     private val onAddBook: (Book, ReadingStatus) -> Unit,
-    private val existingBookIds: Set<Int> = emptySet() // NUEVO: ids de libros existentes
-
+    private val existingBookIds: Set<Int> = emptySet()
 ) : ListAdapter<Book, SearchBookAdapter.SearchBookViewHolder>(BookDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchBookViewHolder {
@@ -36,17 +35,18 @@ class SearchBookAdapter(
         private val authorTextView: TextView = itemView.findViewById(R.id.tvAuthor)
         private val subjectsTextView: TextView = itemView.findViewById(R.id.tvSubjects)
         private val coverImageView: ImageView = itemView.findViewById(R.id.ivCover)
-        private val btnAdd: Button = itemView.findViewById(R.id.btnAdd) // Un solo botón
+        private val btnAdd: Button = itemView.findViewById(R.id.btnAdd)
         private val statusLabel: TextView? = itemView.findViewById(R.id.tvStatus)
 
-
         fun bind(book: Book) {
+            val context = itemView.context
+
             titleTextView.text = book.title
             authorTextView.text = book.authorsString
             subjectsTextView.text = book.subjects.take(3).joinToString(", ")
 
             book.imageUrl?.let { url ->
-                Glide.with(itemView.context)
+                Glide.with(context)
                     .load(url)
                     .placeholder(R.drawable.ic_book)
                     .into(coverImageView)
@@ -57,19 +57,21 @@ class SearchBookAdapter(
             val bookExists = existingBookIds.contains(book.id)
 
             if (bookExists) {
-                // Libro ya existe - mostrar estado deshabilitado
-                btnAdd.text = "✓ Añadido"
+                // ✅ Libro ya existe - texto traducido
+                btnAdd.text = context.getString(R.string.adapter_book_added)
                 btnAdd.isEnabled = false
                 btnAdd.alpha = 0.6f
-                btnAdd.setBackgroundColor(itemView.context.getColor(R.color.text_secondary))
-                statusLabel?.text = "Ya agregado"
+                btnAdd.setBackgroundColor(context.getColor(R.color.text_secondary))
+
+                // ✅ Label de estado traducido
+                statusLabel?.text = context.getString(R.string.adapter_already_added)
                 statusLabel?.visibility = View.VISIBLE
             } else {
-                // Libro no existe - mostrar botón habilitado
-                btnAdd.text = "+"
+                // ✅ Libro no existe - botón habilitado
+                btnAdd.text = context.getString(R.string.adapter_add_button)
                 btnAdd.isEnabled = true
                 btnAdd.alpha = 1f
-                btnAdd.setBackgroundColor(itemView.context.getColor(R.color.brown_dark))
+                btnAdd.setBackgroundColor(context.getColor(R.color.brown_dark))
                 statusLabel?.visibility = View.GONE
             }
 
@@ -80,18 +82,22 @@ class SearchBookAdapter(
             }
         }
 
+        // ✅ MÉTODO CORREGIDO con string resources
         private fun showAddMenuPopup(view: View, book: Book) {
-            val popupMenu = PopupMenu(itemView.context, view)
+            val context = itemView.context
+            val popupMenu = PopupMenu(context, view)
+
             popupMenu.menu.apply {
-                add("Por leer").setOnMenuItemClickListener {
+                // ✅ Opciones del menú traducidas
+                add(context.getString(R.string.menu_want_to_read)).setOnMenuItemClickListener {
                     onAddBook(book, ReadingStatus.TO_READ)
                     true
                 }
-                add("Leyendo").setOnMenuItemClickListener {
+                add(context.getString(R.string.menu_reading)).setOnMenuItemClickListener {
                     onAddBook(book, ReadingStatus.READING)
                     true
                 }
-                add("Leído").setOnMenuItemClickListener {
+                add(context.getString(R.string.menu_finished)).setOnMenuItemClickListener {
                     onAddBook(book, ReadingStatus.FINISHED)
                     true
                 }

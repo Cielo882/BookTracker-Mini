@@ -229,4 +229,16 @@
     <string name="reader_title_extreme">Extreme reader ⚡</string>
     <string name="reader_title_legend">Literary legend 👑</string>
     <string name="default_initial">R</string>
+
+    <string name="search_wait_message">Wait a moment...</string>
+
+    <!-- Search Book Adapter -->
+    <string name="adapter_book_added">✓ Added</string>
+    <string name="adapter_already_added">Already added</string>
+    <string name="adapter_add_button">+</string>
+
+    <!-- Popup Menu Options -->
+    <string name="menu_want_to_read">Want to Read</string>
+    <string name="menu_reading">Reading</string>
+    <string name="menu_finished">Read</string>
 </resources>

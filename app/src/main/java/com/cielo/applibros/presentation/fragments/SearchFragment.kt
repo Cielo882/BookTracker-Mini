@@ -34,9 +34,7 @@ class SearchFragment : Fragment() {
     private var existingBookIds: Set<Int> = emptySet()
 
     private var networkDialogShown = false
-
     private var lastSearchTime = 0L
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -173,12 +171,18 @@ class SearchFragment : Fragment() {
         }
     }
 
+    // ✅ MÉTODO CORREGIDO con string resource
     private fun performSearch() {
         val currentTime = System.currentTimeMillis()
         val timeSinceLastSearch = currentTime - lastSearchTime
 
         if (timeSinceLastSearch < 2000) { // 2 segundos
-            Toast.makeText(requireContext(), "Espera un momento...", Toast.LENGTH_SHORT).show()
+            // ✅ Usando string resource
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.search_wait_message),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 
@@ -189,46 +193,15 @@ class SearchFragment : Fragment() {
         }
     }
 
+    // ✅ Agregar el método showNoResults que faltaba
     private fun showNoResults() {
         emptyState.visibility = View.VISIBLE
         rvSearchResults.visibility = View.GONE
 
         MaterialAlertDialogBuilder(requireContext())
-            // ✅ Usando string resources
             .setTitle(getString(R.string.search_no_results_title))
             .setMessage(getString(R.string.search_no_results_message))
             .setPositiveButton(getString(R.string.btn_understood), null)
-            .show()
-    }
-
-    private fun showError(errorMessage: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            // ✅ Usando string resources
-            .setTitle(getString(R.string.search_error_title))
-            .setMessage(errorMessage)
-            .setPositiveButton(getString(R.string.btn_retry)) { _, _ ->
-                performSearch()
-            }
-            .setNegativeButton(getString(R.string.btn_cancel), null)
-            .show()
-    }
-
-    private fun showBookAddedConfirmation(bookTitle: String, status: ReadingStatus) {
-        // ✅ Convertir status a string traducido
-        val statusText = when (status) {
-            ReadingStatus.TO_READ -> getString(R.string.status_to_read)
-            ReadingStatus.READING -> getString(R.string.status_reading)
-            ReadingStatus.FINISHED -> getString(R.string.status_finished)
-        }
-
-        MaterialAlertDialogBuilder(requireContext())
-            // ✅ Usando string resources con parámetros
-            .setTitle(getString(R.string.search_book_added_title))
-            .setMessage(getString(R.string.search_book_added_message, bookTitle, statusText))
-            .setPositiveButton(getString(R.string.search_view_book)) { _, _ ->
-                (activity as? MainActivity)?.navigateToStatus(status)
-            }
-            .setNegativeButton(getString(R.string.search_continue_searching), null)
             .show()
     }
 }

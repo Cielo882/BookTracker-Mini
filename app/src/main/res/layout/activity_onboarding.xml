@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintBottom_toTopOf="@+id/tabIndicator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -21,14 +21,13 @@
         android:id="@+id/tabIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/bottomBar"
-        app:layout_constraintBottom_toTopOf="@+id/btnNext"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tabBackground="@drawable/tab_selector"
         app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"
-        android:layout_marginBottom="16dp" />
+        app:tabIndicatorHeight="0dp" />
 
     <!-- Barra inferior con botones -->
     <LinearLayout
@@ -54,7 +53,6 @@
         <TextView
             android:id="@+id/btnSkip"
             style="@style/Button.Primary2"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
