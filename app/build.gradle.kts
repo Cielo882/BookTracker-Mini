@@ -23,29 +23,34 @@ android {
         applicationId = "com.cielo.applibros"
         minSdk =28
         targetSdk = 35
-        versionCode =3
-        versionName ="2.1"
+        versionCode =4
+        versionName ="2.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+  
+
     buildTypes {
         release {
-            isMinifyEnabled = true
-            isShrinkResources= true
+            isMinifyEnabled = false
+            isShrinkResources= false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            //  AGREGAR: Habilitar Crashlytics mapping para release
+
+
+
+            //   Habilitar Crashlytics mapping para release
             configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
-                mappingFileUploadEnabled = true
+                mappingFileUploadEnabled = false
             }
         }
 
         debug {
 
-            //  AGREGAR: Deshabilitar en debug
+            //   Deshabilitar en debug
             configure<com.google.firebase.crashlytics.buildtools.gradle.CrashlyticsExtension> {
                 mappingFileUploadEnabled = false
             }

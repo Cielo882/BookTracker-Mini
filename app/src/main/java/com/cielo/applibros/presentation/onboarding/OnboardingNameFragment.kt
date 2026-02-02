@@ -38,4 +38,10 @@ class OnboardingNameFragment : Fragment() {
         val name = etUserName.text.toString().trim()
         (activity as? OnboardingActivity)?.setUserName(name)
     }
+
+    override fun onResume() {
+        super.onResume()
+        etUserName.requestFocus()
+    }
+
 }

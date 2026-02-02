@@ -3,6 +3,7 @@ package com.cielo.applibros.presentation.views
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Base64
 import android.util.Log
 import android.view.MotionEvent
 import android.view.View
@@ -15,9 +16,9 @@ class DrawableAvatarView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val drawPath = Path()
-    private val drawPaint = Paint().apply {
+
+    private val drawPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         color = Color.BLACK
-        isAntiAlias = true
         strokeWidth = 8f
         style = Paint.Style.STROKE
         strokeJoin = Paint.Join.ROUND
@@ -25,8 +26,15 @@ class DrawableAvatarView @JvmOverloads constructor(
     }
 
     private val canvasPaint = Paint(Paint.DITHER_FLAG)
+
     private var drawCanvas: Canvas? = null
     private var canvasBitmap: Bitmap? = null
+
+    // 🔧 Reutiliza paints (NO en onDraw)
+    private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        color = Color.parseColor("#F5F5F5")
+        style = Paint.Style.FILL
+    }
 
     var currentColor: Int
         get() = drawPaint.color
@@ -41,22 +49,17 @@ class DrawableAvatarView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        val centerX = width / 2f
-        val centerY = height / 2f
-        val radius = Math.min(width, height) / 2f * 0.95f
+        val cx = width / 2f
+        val cy = height / 2f
+        val radius = minOf(width, height) / 2f * 0.95f
 
-        // Fondo blanco circular
-        val bgPaint = Paint().apply {
-            color = Color.parseColor("#F5F5F5")
-            isAntiAlias = true
-            style = Paint.Style.FILL
-        }
-        canvas.drawCircle(centerX, centerY, radius, bgPaint)
+        // Fondo circular
+        canvas.drawCircle(cx, cy, radius, bgPaint)
 
-        // Dibujar el molde guía
-        drawAvatarGuide(canvas, centerX, centerY, radius)
+        // Guía
+        drawAvatarGuide(canvas, cx, cy, radius)
 
-        // Dibujar los trazos del usuario
+        // Dibujo del usuario
         canvasBitmap?.let { canvas.drawBitmap(it, 0f, 0f, canvasPaint) }
         canvas.drawPath(drawPath, drawPaint)
     }
@@ -206,80 +209,59 @@ class DrawableAvatarView @JvmOverloads constructor(
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val touchX = event.x
-        val touchY = event.y
+        parent?.requestDisallowInterceptTouchEvent(true)
 
-        when (event.action) {
+        val x = event.x
+        val y = event.y
+
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                drawPath.moveTo(touchX, touchY)
+                drawPath.reset()
+                drawPath.moveTo(x, y)
             }
+
             MotionEvent.ACTION_MOVE -> {
-                drawPath.lineTo(touchX, touchY)
+                drawPath.lineTo(x, y)
             }
-            MotionEvent.ACTION_UP -> {
+
+            MotionEvent.ACTION_UP,
+            MotionEvent.ACTION_CANCEL -> {
                 drawCanvas?.drawPath(drawPath, drawPaint)
                 drawPath.reset()
+                parent?.requestDisallowInterceptTouchEvent(false)
             }
         }
+
         invalidate()
         return true
     }
 
+    // Borrado seguro
     fun clear() {
+        drawPath.reset()
         drawCanvas?.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR)
         invalidate()
     }
 
     fun getBitmapAsString(): String {
         val bitmap = canvasBitmap ?: return ""
+        if (bitmap.width == 0 || bitmap.height == 0) return ""
 
-        if (bitmap.width == 0 || bitmap.height == 0) {
-            return ""
-        }
-
-        try {
+        return try {
             val stream = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-            val byteArray = stream.toByteArray()
-            return android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT)
+            Base64.encodeToString(stream.toByteArray(), Base64.DEFAULT)
         } catch (e: Exception) {
-            e.printStackTrace()
-            return ""
+            ""
         }
     }
+
     fun setBitmapFromString(base64: String) {
+        if (base64.isEmpty()) return
+
         try {
-            if (base64.isEmpty()) return
-
-            val decodedBytes = android.util.Base64.decode(
-                base64,
-                android.util.Base64.DEFAULT
-            )
-
-            val bitmap = BitmapFactory.decodeByteArray(
-                decodedBytes,
-                0,
-                decodedBytes.size
-            ) ?: return
-
-            // 🔧 MUY IMPORTANTE: copiar a bitmap mutable
-            canvasBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
-            drawCanvas = Canvas(canvasBitmap!!)
-
-            invalidate()
-
-            Log.d("DrawableAvatarView", "Bitmap restored successfully")
-
-        } catch (e: Exception) {
-            Log.e("DrawableAvatarView", "Error restoring bitmap", e)
-        }
-    }
-
-
-    fun loadFromString(base64: String) {
-        try {
-            val decodedBytes = android.util.Base64.decode(base64, android.util.Base64.DEFAULT)
-            val bitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.size)
+            val bytes = Base64.decode(base64, Base64.DEFAULT)
+            val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return
 
             canvasBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
             drawCanvas = Canvas(canvasBitmap!!)

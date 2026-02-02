@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.cielo.applibros.R
 import com.cielo.applibros.presentation.views.DrawableAvatarView
-
 class OnboardingAvatarFragment : Fragment() {
 
     private lateinit var avatarView: DrawableAvatarView
@@ -44,23 +44,48 @@ class OnboardingAvatarFragment : Fragment() {
 
         setupColorButtons(view)
 
+        // 🔄 Restaurar dibujo si existe
         arguments?.getString(ARG_DRAWING)?.let { base64 ->
             if (base64.isNotEmpty()) {
                 avatarView.setBitmapFromString(base64)
                 Log.d("AvatarFragment", "Avatar restored, len=${base64.length}")
             }
         }
+
+        // 🧹 Borrar dibujo
         btnClear.setOnClickListener {
             avatarView.clear()
         }
 
+        // 🔤 Usar inicial
         btnUseInitial.setOnClickListener {
             val activity = activity as? OnboardingActivity ?: return@setOnClickListener
-
             activity.setUseInitial(true)
-            activity.setAvatarDrawing("") // seguridad extra
-            activity.finishOnboarding()   // 🔥 AQUÍ ESTABA TODO
+            activity.setAvatarDrawing("")
+            activity.finishOnboarding()
         }
+    }
+
+    // 🔒 CLAVE: bloquear swipe del ViewPager al entrar
+    override fun onResume() {
+        super.onResume()
+        (activity as? OnboardingActivity)
+            ?.findViewById<ViewPager2>(R.id.viewPager)
+            ?.isUserInputEnabled = false
+    }
+
+    // 🔓 Volver a habilitar swipe al salir
+    override fun onPause() {
+        super.onPause()
+
+        val drawing = avatarView.getBitmapAsString()
+        if (drawing.isNotEmpty()) {
+            (activity as? OnboardingActivity)?.setAvatarDrawing(drawing)
+        }
+
+        (activity as? OnboardingActivity)
+            ?.findViewById<ViewPager2>(R.id.viewPager)
+            ?.isUserInputEnabled = true
     }
 
     private fun setupColorButtons(view: View) {
@@ -81,11 +106,13 @@ class OnboardingAvatarFragment : Fragment() {
             }
         }
 
-        // Seleccionar negro por defecto
         highlightSelectedColor(colorButtons, 0)
     }
 
-    private fun highlightSelectedColor(buttons: List<ImageButton>, selectedIndex: Int) {
+    private fun highlightSelectedColor(
+        buttons: List<ImageButton>,
+        selectedIndex: Int
+    ) {
         buttons.forEachIndexed { index, button ->
             button.alpha = if (index == selectedIndex) 1f else 0.4f
             button.scaleX = if (index == selectedIndex) 1.1f else 1f
@@ -95,16 +122,6 @@ class OnboardingAvatarFragment : Fragment() {
 
     fun getAvatarDrawing(): String {
         return avatarView.getBitmapAsString()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        val drawing = avatarView.getBitmapAsString()
-
-        if (drawing.isNotEmpty()) {
-            (activity as? OnboardingActivity)?.setAvatarDrawing(drawing)
-        }
     }
 
     companion object {
@@ -118,5 +135,4 @@ class OnboardingAvatarFragment : Fragment() {
             }
         }
     }
-
 }

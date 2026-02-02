@@ -44,8 +44,10 @@ import android.widget.EditText
 import com.google.android.material.card.MaterialCardView
 import androidx.appcompat.app.AlertDialog
 import android.view.View
+import androidx.core.view.WindowInsetsCompat
 import com.cielo.applibros.data.local.UserProfile
 import com.cielo.applibros.domain.model.Language
+import com.cielo.applibros.utils.LocaleHelper
 import java.util.Calendar
 import java.util.Locale
 
@@ -65,7 +67,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private lateinit var settingsPreferences: SettingsPreferences // NUEVO
 
-    //  AGREGAR: Firebase Helpers
+    //   Firebase Helpers
     private lateinit var analyticsHelper: AnalyticsHelper
     private lateinit var crashlyticsHelper: CrashlyticsHelper
 
@@ -74,19 +76,31 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        applyAppLanguage()
+        //applyAppLanguage()
         super.onCreate(savedInstanceState)
 
+        // Hacer status bar transparente
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+
+            window.setDecorFitsSystemWindows(false)
+        } else {
+            // Android 10 y anteriores
+            window.decorView.systemUiVisibility = (
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    )
+        }
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
         initializeFirebase()
 
-        //  AGREGAR ESTO: Verificar si mostrar onboarding
+        //   Verificar si mostrar onboarding
         if (OnboardingActivity.shouldShowOnboarding(this)) {
             startActivity(Intent(this, OnboardingActivity::class.java))
             finish()
             return
         }
 
-        // AGREGAR: Cargar tema antes de setContentView
+        //  Cargar tema antes de setContentView
         settingsPreferences = SettingsPreferences(this)
         applyTheme(settingsPreferences.getSettings().themeMode)
 
@@ -113,25 +127,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val settingsPrefs = SettingsPreferences(this)
         val language = settingsPrefs.getSettings().language
 
-        val locale = when (language) {
-            Language.SPANISH -> Locale("es")
-            Language.ENGLISH -> Locale("en")
+        val languageCode = when (language) {
+            Language.SPANISH -> "es"
+            Language.ENGLISH -> "en"
         }
 
-        Locale.setDefault(locale)
-
-        val config = resources.configuration
-        config.setLocale(locale)
-
-        // Para Android 7.0 y superior
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            createConfigurationContext(config)
-        }
-
-        // Actualizar la configuración
-        resources.updateConfiguration(config, resources.displayMetrics)
+        //  Aplicar locale usando el helper
+        LocaleHelper.setLocale(this, languageCode)
     }
 
+    override fun attachBaseContext(newBase: Context) {
+        val settingsPrefs = SettingsPreferences(newBase)
+        val language = settingsPrefs.getSettings().language
+
+        val languageCode = when (language) {
+            Language.SPANISH -> "es"
+            Language.ENGLISH -> "en"
+        }
+
+        // Aplicar locale ANTES de crear la actividad
+        super.attachBaseContext(LocaleHelper.setLocale(newBase, languageCode))
+    }
     private fun initializeFirebase() {
         val app = application as BookTrackerApplication
         analyticsHelper = AnalyticsHelper(app.analytics)
@@ -245,7 +261,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         settingsViewModel = SettingsViewModel(settingsPreferences)
         } catch (e: Exception) {
-            //  AGREGAR: Log de error en Crashlytics
+            //   Log de error en Crashlytics
             crashlyticsHelper.logException(e, "setupDependencies")
         }
     }
@@ -261,16 +277,25 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun setupNavigationHeader() {
         val headerView = navigationView.getHeaderView(0)
 
-        //  AGREGAR: Ajustar padding para el notch
+        //   Ajustar padding para el notch
+        // ✅ VERSIÓN ACTUALIZADA - Compatible con Android 11+
         headerView.setOnApplyWindowInsetsListener { view, insets ->
-            val statusBarHeight = insets.systemWindowInsetTop
+            val statusBarHeight = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                // Android 11+
+                insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            } else {
+                // Android 10 y anteriores
+                insets.systemWindowInsetTop
+            }
+
             view.setPadding(
                 view.paddingLeft,
-                statusBarHeight + 24, // Padding top + altura de status bar
+                statusBarHeight + 24, // Status bar + padding extra
                 view.paddingRight,
                 view.paddingBottom
             )
-            insets
+
+            insets // ✅ Consumir los insets
         }
 
         val profileHelper = UserProfileHelper(this)
@@ -483,7 +508,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 .replace(R.id.fragment_container, fragment)
                 .commit()
 
-            //  AGREGAR: Log de navegación
+            //   Log de navegación
             val fragmentName = fragment::class.simpleName ?: "Unknown"
             analyticsHelper.logFragmentOpened(fragmentName)
             crashlyticsHelper.logNavigationEvent(fragmentName)

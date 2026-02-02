@@ -1,75 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="32dp"
-    android:background="?attr/colorPrimary">
+    android:background="?attr/colorPrimary"
+    android:fillViewport="true"
+    android:overScrollMode="never">
 
-
-
-    <!-- Emoji -->
-    <ImageView
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:src="@drawable/icons_manosaludo"
-        android:layout_marginBottom="32dp"/>
-
-
-
-    <!-- Título -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/c_mo_te_llamas"
-        android:textSize="28sp"
-        style="@style/TextAppearance.BookTracker.Headline"
-        android:textColor="?attr/colorOnSurface"
-        android:layout_marginBottom="8dp" />
-
-    <!-- Subtítulo -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/te_daremos_la_bienvenida_personalizada"
-        android:textSize="14sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:textAlignment="center"
-        android:gravity="center"
-        android:layout_marginBottom="40dp" />
-
-    <!-- Campo de texto -->
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/TextInputLayout.Outlined"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/tu_nombre"
-        app:boxStrokeColor="?attr/colorOnSurface"
-        app:hintTextColor="?attr/colorOnSurface">
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="32dp">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etUserName"
+        <!-- Emoji -->
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/icons_manosaludo"
+            android:layout_marginBottom="32dp"/>
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/c_mo_te_llamas"
+            android:textSize="28sp"
+            style="@style/TextAppearance.BookTracker.Headline"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Subtítulo -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/te_daremos_la_bienvenida_personalizada"
+            android:textSize="14sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textAlignment="center"
+            android:gravity="center"
+            android:layout_marginBottom="40dp" />
+
+        <!-- Campo de texto -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/TextInputLayout.Outlined"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName|textCapWords"
-            android:maxLines="1"
-            android:maxLength="50"
+            android:hint="@string/tu_nombre"
+            app:boxStrokeColor="?attr/colorOnSurface"
+            app:hintTextColor="?attr/colorOnSurface">
 
-            android:textSize="18sp"
-            android:padding="16dp" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName|textCapWords"
+                android:maxLines="1"
+                android:maxLength="50"
+                android:textSize="18sp"
+                android:padding="16dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <!-- Texto de ayuda -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/puedes_cambiarlo_despu_s_en_ajustes"
+            android:textSize="12sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:layout_marginTop="16dp" />
 
-    <!-- Texto de ayuda -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/puedes_cambiarlo_despu_s_en_ajustes"
-        android:textSize="12sp"
-        android:textColor="?attr/colorOnSurfaceVariant"
-        android:layout_marginTop="16dp" />
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

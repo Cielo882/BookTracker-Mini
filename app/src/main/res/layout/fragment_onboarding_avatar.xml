@@ -35,20 +35,28 @@
             android:layout_marginBottom="24dp" />
 
         <!-- Canvas para dibujar -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="280dp"
-            android:layout_height="280dp"
-            app:cardCornerRadius="140dp"
-            app:cardElevation="8dp"
-            app:cardBackgroundColor="?attr/colorSurface"
-            android:layout_marginBottom="24dp">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
 
-            <com.cielo.applibros.presentation.views.DrawableAvatarView
-                android:id="@+id/avatarView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+            android:focusable="true">
 
-        </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="280dp"
+                android:layout_height="280dp"
+                app:cardCornerRadius="140dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:layout_marginBottom="24dp">
+
+                <com.cielo.applibros.presentation.views.DrawableAvatarView
+                    android:id="@+id/avatarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </com.google.android.material.card.MaterialCardView>
+        </FrameLayout>
 
         <!-- Paleta de colores -->
         <LinearLayout

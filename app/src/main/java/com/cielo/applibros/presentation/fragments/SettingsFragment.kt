@@ -27,6 +27,7 @@ import com.cielo.applibros.domain.model.Language
 import com.cielo.applibros.domain.model.ThemeMode
 import com.cielo.applibros.presentation.viewmodel.BookViewModelUpdated
 import com.cielo.applibros.presentation.viewmodel.SettingsViewModel
+import com.cielo.applibros.utils.LocaleHelper
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.BuildConfig
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
@@ -345,23 +346,15 @@ class SettingsFragment : Fragment() {
     }
 
     private fun applyLanguage(language: Language) {
-        val locale = when (language) {
-            Language.SPANISH -> Locale("es")
-            Language.ENGLISH -> Locale("en")
+        val languageCode = when (language) {
+            Language.SPANISH -> "es"
+            Language.ENGLISH -> "en"
         }
 
-        Locale.setDefault(locale)
+        //  Aplicar locale
+        LocaleHelper.setLocale(requireContext(), languageCode)
 
-        val config = resources.configuration
-        config.setLocale(locale)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            requireContext().createConfigurationContext(config)
-        }
-
-        resources.updateConfiguration(config, resources.displayMetrics)
-
-        // Reiniciar la actividad para aplicar cambios
+        //  Reiniciar la actividad para aplicar cambios
         activity?.recreate()
     }
 

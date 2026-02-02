@@ -61,11 +61,10 @@ class OnboardingActivity : AppCompatActivity() {
         val adapter = OnboardingAdapter(this, avatarDrawing)
         viewPager.adapter = adapter
 
-        viewPager.isUserInputEnabled = true
 
 
         btnNext.setOnClickListener {
-            //  AGREGAR: Guardar avatar ANTES de continuar
+            //   Guardar avatar ANTES de continuar
             if (viewPager.currentItem == 2) {
                 saveCurrentAvatar()  // Guardar el dibujo
             }

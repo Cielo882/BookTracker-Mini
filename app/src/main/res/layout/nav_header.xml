@@ -8,17 +8,18 @@
     android:background="?attr/colorPrimary"
     android:paddingStart="24dp"
     android:paddingEnd="24dp"
-    android:paddingTop="48dp"
+
     android:paddingBottom="24dp"
     android:clickable="true"
     android:focusable="true"
-    android:fitsSystemWindows="true">
+>
 
     <!-- Avatar -->
     <FrameLayout
         android:id="@+id/avatarContainer"
         android:layout_width="88dp"
         android:layout_height="88dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
