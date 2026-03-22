@@ -19,3 +19,7 @@
 .idea/deviceManager.xml
 .idea/avd.xml
 .idea/devices.xml
+
+
+# Firebase
+google-services.json
