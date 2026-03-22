@@ -1,0 +1,10 @@
+{
+  "project_info": {
+    "project_id": "your-project-id"
+  },
+  "api_key": [
+    {
+      "current_key": "YOUR_API_KEY"
+    }
+  ]
+}
